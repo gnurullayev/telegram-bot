@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('movies_genres', function (Blueprint $table) {
             $table->id();
-            $table->string('movie_id');
+            $table->bigInteger('movie_id');
             $table->foreign('movie_id')
                 ->references('id')
                 ->on('movies')->onDelete('cascade');
-            $table->string('tag_id');
+            $table->bigInteger('tag_id');
             $table->foreign('tag_id')
                 ->references('id')
                 ->on('tags')->onDelete('cascade');
