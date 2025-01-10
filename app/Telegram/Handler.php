@@ -14,7 +14,8 @@ class Handler extends WebhookHandler
 
     public function start(): void
     {
-        $this->reply("salom botga hush kelibsiz");
-        // Telegraph::video("https://topmovie.sgp1.cdn.digitaloceanspaces.com/Qizil-g'unchalar/G'unchalar%2010-qism%20480p%20O'zbek%20tilida.mp4")->send();
+        // $this->reply("salom botga hush kelibsiz");
+        $telegraph = new Telegraph();
+        $telegraph->video("https://topmovie.sgp1.cdn.digitaloceanspaces.com/Qizil-g'unchalar/G'unchalar%2010-qism%20480p%20O'zbek%20tilida.mp4")->send();
     }
 }
