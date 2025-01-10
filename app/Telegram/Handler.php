@@ -25,11 +25,11 @@ class Handler extends WebhookHandler
         // $chat_id = $updates[0]->getMessage()->getChat()->getId;
         // Video yuborish
         try {
-            $this->reply("salom botga hush kelibsiz 1");
+            $this->reply("Ko'proq ma'lumot uchun <a href='https://topmovie.me'>Topmovie.me</a> saytiga tashrif buyuring!");
             // $telegraph->chat($chat_id)->video("https://topmovie.sgp1.cdn.digitaloceanspaces.com/Qizil-g'unchalar/G'unchalar%2010-qism%20480p%20O'zbek%20tilida.mp4")->send();
-            FacadesTelegraph::chat($chat_id) // Telegram chat ID-ni kiriting
-                ->message("Ko'proq ma'lumot uchun <a href='https://topmovie.me'>Topmovie.me</a> saytiga tashrif buyuring!") // HTML formatdagi matn
-                ->send();
+            // FacadesTelegraph::chat($chat_id) // Telegram chat ID-ni kiriting
+            //     ->message("Ko'proq ma'lumot uchun <a href='https://topmovie.me'>Topmovie.me</a> saytiga tashrif buyuring!") // HTML formatdagi matn
+            //     ->send();
             $this->reply("salom botga hush kelibsiz 2");
         } catch (\Exception $e) {
             $this->reply('Xato yuz berdi: ' . $e->getMessage());
