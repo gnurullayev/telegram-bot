@@ -14,8 +14,12 @@ class Handler extends WebhookHandler
 
     public function start(): void
     {
-        // $this->reply("salom botga hush kelibsiz");
+        // $this->bo("salom botga hush kelibsiz");
+
+        $this->reply(json_encode($this->bot->info()));
         $telegraph = new Telegraph();
+        // $updates = $telegraph->getUpdates();
+        // $chatId = $updates[0]->getMessage()->getChat()->getId;
         // Video yuborish
         try {
             $telegraph->video("https://topmovie.sgp1.cdn.digitaloceanspaces.com/Qizil-g'unchalar/G'unchalar%2010-qism%20480p%20O'zbek%20tilida.mp4")
