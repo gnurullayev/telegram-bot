@@ -30,6 +30,7 @@ class Handler extends WebhookHandler
             FacadesTelegraph::chat($chat_id) // Telegram chat ID-ni kiriting
                 ->message("Ko'proq ma'lumot uchun <a href='https://topmovie.me'>Topmovie.me</a> saytiga tashrif buyuring!") // HTML formatdagi matn
                 ->send();
+            $this->reply("salom botga hush kelibsiz 2");
         } catch (\Exception $e) {
             $this->reply('Xato yuz berdi: ' . $e->getMessage());
         }
