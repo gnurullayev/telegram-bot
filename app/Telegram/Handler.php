@@ -27,9 +27,9 @@ class Handler extends WebhookHandler
             $telegraph->chat($chat_id)
                 ->video("https://topmovie.sgp1.cdn.digitaloceanspaces.com/Qizil-g'unchalar/G'unchalar%2010-qism%20480p%20O'zbek%20tilida.mp4")
                 // ->caption("🎬 <b>Filming nomi:</b> Ajal poygasi\n\n/rand - 🎲 Random kinolar\n/top - 🏆 Top kinolar\n/last - ✨ Oxirgi yuklanganlar\n/help - 📞 Qo‘llab-quvvatlash\n/dev - 👨‍💻 Dasturchi")
-                ->keyboard([
-                    ['🎬 Ko‘proq Filmlar', '📥 Saqlab qo‘yish'], // Inline tugmalar
-                ])
+                // ->keyboard([
+                //     ['🎬 Ko‘proq Filmlar', '📥 Saqlab qo‘yish'], // Inline tugmalar
+                // ])
                 ->send();
             // $bot->chat($chatId)
             //     ->video("https://topmovie.sgp1.cdn.digitaloceanspaces.com/Qizil-g'unchalar/G'unchalar%2010-qism%20480p%20O'zbek%20tilida.mp4")
