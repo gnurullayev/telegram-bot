@@ -6,3 +6,13 @@ use Illuminate\Support\Facades\Artisan;
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote')->hourly();
+
+
+Artisan::command('menu', function () {
+    /** @var \DefStudio\Telegraph\Models\TelegraphBot $telegraphBot */
+
+    $telegraphBot->registerCommands([
+        'hello' => 'salom botga hush kelibisiz',
+        'start' => 'sizga nima yordam bera olaman'
+    ])->send();
+});
