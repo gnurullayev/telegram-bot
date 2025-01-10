@@ -25,8 +25,8 @@ class Handler extends WebhookHandler
         // Video yuborish
         $bot = \DefStudio\Telegraph\Models\TelegraphBot::find(1);
         try {
-            $bot->message("🎬 <b>Filming nomi:</b> Ajal poygasi")
-                ->video(storage_path('app/public/videos/ajal_poygasi.mp4')) // Videoning to'liq manzilini kiriting
+            $bot->telegraph()
+                ->video(storage_path('app/public/videos/ajal_poygasi.mp4'))
                 ->caption("🎬 <b>Filming nomi:</b> Ajal poygasi\n\n/rand - 🎲 Random kinolar\n/top - 🏆 Top kinolar\n/last - ✨ Oxirgi yuklanganlar\n/help - 📞 Qo‘llab-quvvatlash\n/dev - 👨‍💻 Dasturchi")
                 ->keyboard([
                     ['🎬 Ko‘proq Filmlar', '📥 Saqlab qo‘yish'], // Inline tugmalar
