@@ -3,7 +3,7 @@
 namespace App\Telegram;
 
 use DefStudio\Telegraph\Handlers\WebhookHandler;
-use DefStudio\Telegraph\Telegraph;
+use DefStudio\Telegraph\Models\TelegraphChat;
 
 class Handler extends WebhookHandler
 {
@@ -19,7 +19,7 @@ class Handler extends WebhookHandler
         // $this->reply(json_encode($this->bot->info()['id']));
         // $this->reply(json_encode($this->message->id()));
         $chat_id = $this->message->id();
-        $telegraph = new Telegraph();
+        $telegraph = TelegraphChat::find(1);
         // $updates = $telegraph->getUpdates();
         // $chat_id = $updates[0]->getMessage()->getChat()->getId;
         // Video yuborish
@@ -32,7 +32,7 @@ class Handler extends WebhookHandler
                 //     ['🎬 Ko‘proq Filmlar', '📥 Saqlab qo‘yish'], // Inline tugmalar
                 // ])
                 ->send();
-            $this->reply("salom botga hush kelibsiz 2");
+            // $this->link(, "https://topmovie.sgp1.cdn.digitaloceanspaces.com/Qizil-g'unchalar/G'unchalar%2010-qism%20480p%20O'zbek%20tilida.mp4");
             // $bot->chat($chatId)
             //     ->video("https://topmovie.sgp1.cdn.digitaloceanspaces.com/Qizil-g'unchalar/G'unchalar%2010-qism%20480p%20O'zbek%20tilida.mp4")
             //     ->send();
