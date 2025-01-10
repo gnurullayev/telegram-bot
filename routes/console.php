@@ -10,8 +10,9 @@ Artisan::command('inspire', function () {
 
 Artisan::command('menu', function () {
     /** @var \DefStudio\Telegraph\Models\TelegraphBot $telegraphBot */
+    $bot = \DefStudio\Telegraph\Models\TelegraphBot::find(1);
 
-    $telegraphBot->registerCommands([
+    $bot->registerCommands([
         'hello' => 'salom botga hush kelibisiz',
         'start' => 'sizga nima yordam bera olaman'
     ])->send();
