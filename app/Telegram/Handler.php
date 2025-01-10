@@ -16,7 +16,7 @@ class Handler extends WebhookHandler
     {
         // $this->bo("salom botga hush kelibsiz");
 
-        $this->reply(json_encode($this->bot->info()));
+        $this->reply(json_encode($this->bot->info()['id']));
         $telegraph = new Telegraph();
         // $updates = $telegraph->getUpdates();
         // $chatId = $updates[0]->getMessage()->getChat()->getId;
