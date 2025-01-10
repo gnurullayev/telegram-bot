@@ -23,10 +23,9 @@ class Handler extends WebhookHandler
         // $updates = $telegraph->getUpdates();
         // $chat_id = $updates[0]->getMessage()->getChat()->getId;
         // Video yuborish
-        $bot = \DefStudio\Telegraph\Models\TelegraphBot::find(1);
         try {
             $telegraph->chat($chat_id)
-                ->video(storage_path('app/public/videos/ajal_poygasi.mp4'))
+                ->video(storage_path("https://topmovie.sgp1.cdn.digitaloceanspaces.com/Qizil-g'unchalar/G'unchalar%2010-qism%20480p%20O'zbek%20tilida.mp4"))
                 // ->caption("🎬 <b>Filming nomi:</b> Ajal poygasi\n\n/rand - 🎲 Random kinolar\n/top - 🏆 Top kinolar\n/last - ✨ Oxirgi yuklanganlar\n/help - 📞 Qo‘llab-quvvatlash\n/dev - 👨‍💻 Dasturchi")
                 ->keyboard([
                     ['🎬 Ko‘proq Filmlar', '📥 Saqlab qo‘yish'], // Inline tugmalar
