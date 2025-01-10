@@ -18,16 +18,16 @@ class Handler extends WebhookHandler
 
         // $this->reply(json_encode($this->bot->info()['id']));
         // $this->reply(json_encode($this->message->id()));
-        $chatId = $this->message->id();
+        $chat_id = $this->message->id();
         $telegraph = new Telegraph();
         // $updates = $telegraph->getUpdates();
-        // $chatId = $updates[0]->getMessage()->getChat()->getId;
+        // $chat_id = $updates[0]->getMessage()->getChat()->getId;
         // Video yuborish
         $bot = \DefStudio\Telegraph\Models\TelegraphBot::find(1);
         try {
-            $bot->telegraph()
+            $telegraph->chat($chat_id)
                 ->video(storage_path('app/public/videos/ajal_poygasi.mp4'))
-                ->caption("🎬 <b>Filming nomi:</b> Ajal poygasi\n\n/rand - 🎲 Random kinolar\n/top - 🏆 Top kinolar\n/last - ✨ Oxirgi yuklanganlar\n/help - 📞 Qo‘llab-quvvatlash\n/dev - 👨‍💻 Dasturchi")
+                // ->caption("🎬 <b>Filming nomi:</b> Ajal poygasi\n\n/rand - 🎲 Random kinolar\n/top - 🏆 Top kinolar\n/last - ✨ Oxirgi yuklanganlar\n/help - 📞 Qo‘llab-quvvatlash\n/dev - 👨‍💻 Dasturchi")
                 ->keyboard([
                     ['🎬 Ko‘proq Filmlar', '📥 Saqlab qo‘yish'], // Inline tugmalar
                 ])
