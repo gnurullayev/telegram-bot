@@ -33,6 +33,18 @@ class Category extends Model
             ->saveSlugsTo('slug');
     }
 
+    /**
+     * Scope a query to only include active tags.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeIsActive($query)
+    {
+        return $query->where('is_active', 1);
+    }
+
+
 
     public function newEloquentBuilder($query)
     {

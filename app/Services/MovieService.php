@@ -61,10 +61,18 @@ class MovieService
     public function show($id)
     {
         try {
-            $movie = Movie::findOrFail($id);
+            $movie = Movie::query()->where("id", $id)->with(['tags:id', 'genres:id'])->get()->first();
+            // Custom tags_data uchun
+            $tagsData = [];
+            foreach ($movie->tags as $tag) {
+                $tagsData[] = $tag->id;
+            }
+
+            // Qo'shimcha ma'lumotni $movie modeliga qo'shish
+            $movie->setAttribute('tags_data', $tagsData);
             return Response::customJson($movie);
         } catch (\Exception $e) {
-            return Response::customJsonError('Movie not found', 404);
+            return Response::customJsonError('Movie not found' . " " . $e->getMessage(), 404);
         }
     }
 
@@ -81,13 +89,26 @@ class MovieService
                 $validated['poster_url'] = $posterPath;
             }
 
-
             $movie = Movie::create($validated);
+
+            if (!empty($validated["genres"])) {
+                foreach ($validated["genres"] as $genre) {
+                    $movie->genres()->attach($genre);
+                }
+            }
+
+            if (!empty($validated["tags"])) {
+                foreach ($validated["tags"] as $tag) {
+                    $movie->tags()->attach($tag);
+                }
+            }
+
             return Response::customJson($movie->load("category"), 201);
         } catch (\Exception $e) {
-            return Response::customJsonError('Failed to create movie', 500);
+            return Response::customJsonError('Failed to create movie: ' . " " . $e->getMessage(), 500);
         }
     }
+
 
     /**
      * Update the specified movie in storage.
@@ -109,11 +130,20 @@ class MovieService
                 $validated['poster_url'] = $posterPath;
             }
 
+            if (!empty($validated["genres"])) {
+                $movie->genres()->syncWithoutDetaching($validated["genres"]);
+            }
+
+            if (!empty($validated["tags"])) {
+                $movie->tags()->syncWithoutDetaching($validated["tags"]);
+            }
+
             $movie->update($validated);
+
 
             return Response::customJson($movie);
         } catch (\Exception $e) {
-            return Response::customJsonError('Failed to update movie', 500);
+            return Response::customJsonError('Failed to update movie' . " " . $e->getMessage(), 500);
         }
     }
 
@@ -133,7 +163,7 @@ class MovieService
 
             return Response::customJson(['message' => 'Movie deleted successfully']);
         } catch (\Exception $e) {
-            return Response::customJsonError('Failed to delete movie', 500);
+            return Response::customJsonError('Failed to delete movie' . " " . $e->getMessage(), 500);
         }
     }
 

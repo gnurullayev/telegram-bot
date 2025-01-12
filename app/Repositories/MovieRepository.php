@@ -35,7 +35,7 @@ class MovieRepository extends BaseRepository
      */
     public function allMovies($params)
     {
-        $query = Movie::query()->with(["qualities"]);
+        $query = Movie::query();
 
         if ($params->get('s')) {
             $query->where('title', 'LIKE', "%{$params->get('s')}%");

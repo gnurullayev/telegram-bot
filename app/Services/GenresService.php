@@ -4,13 +4,12 @@ namespace App\Services;
 
 use App\Http\Requests\CategoryStoreRequest;
 use App\Http\Requests\CategoryUpdateRequest;
-use App\Models\Category;
-use App\Models\Movie;
+use App\Models\Genre;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Collection;
 
-class CategoryService
+class GenresService
 {
 
     /**
@@ -18,7 +17,7 @@ class CategoryService
      */
     public function index(Collection $params): JsonResponse
     {
-        $query = Category::query();
+        $query = Genre::query();
 
         if ($params->get('s')) {
             $query->where('name', 'LIKE', "%{$params->get('s')}%");
@@ -28,7 +27,7 @@ class CategoryService
         $query->orderBy('created_at', $params->get('ot'));
 
         $totalItems = $query->count();
-        $categories = $query->skip(($params->get('pi') - 1) * $params->get('ps'))
+        $gernres = $query->skip(($params->get('pi') - 1) * $params->get('ps'))
             ->take($params->get('ps'))
             ->get();
 
@@ -37,7 +36,7 @@ class CategoryService
             'currentPage' => $params->get('pi'),
             'totalPages' => ceil($totalItems / $params->get('ps')),
             'pageSize' => $params->get('ps'),
-            'items' => $categories
+            'items' => $gernres
         ]);
     }
 
@@ -50,11 +49,11 @@ class CategoryService
         try {
             $validated = $request->validated();
 
-            $category = Category::create($validated);
+            $genre = Genre::create($validated);
 
             return Response::customJson([
-                'id' => $category->id,
-                'name' => $category->name,
+                'id' => $genre->id,
+                'name' => $genre->name,
             ], 201);
         } catch (\Exception $e) {
             return Response::customJsonError('Failed to create category' . " " . $e->getMessage(), 500);
@@ -68,8 +67,8 @@ class CategoryService
     {
 
         try {
-            $category = Category::findOrFail($id);
-            return Response::customJson($category);
+            $genre = Genre::findOrFail($id);
+            return Response::customJson($genre);
         } catch (\Exception $e) {
             return Response::customJsonError('Movie not found' . " " . $e->getMessage(), 404);
         }
@@ -81,11 +80,11 @@ class CategoryService
     public function update(CategoryUpdateRequest $request, $id)
     {
         try {
-            $category = Category::findOrFail($id);
+            $genre = Genre::findOrFail($id);
             $validated = $request->validated();
-            $category->update($validated);
+            $genre->update($validated);
 
-            return Response::customJson($category);
+            return Response::customJson($genre);
         } catch (\Exception $e) {
             return Response::customJsonError('Failed to update category' . " " . $e->getMessage(), 500);
         }
@@ -97,43 +96,43 @@ class CategoryService
     public function destroy($id): mixed
     {
         try {
-            $category = Category::findOrFail($id);
+            $genre = Genre::findOrFail($id);
 
-            $category->delete();
+            $genre->delete();
 
             return Response::customJson(['message' => 'Series deleted successfully']);
         } catch (\Exception $e) {
-            return Response::customJsonError('Failed to delete category' . " " . $e->getMessage(), 500);
+            return Response::customJsonError('Failed to delete genre' . " " . $e->getMessage(), 500);
         }
     }
 
 
-    public function usedCategories()
-    {
-        $categories = Movie::whereNotNull('category_id')
-            ->with('category')
-            ->get()
-            ->pluck('category')
-            ->unique('id')
-            ->take(2)
-            ->map(function ($category) {
-                return [
-                    'id' => $category->id,
-                    'name' => $category->name,
-                    'movies' => $category->movies->take(6)->map(function ($item) {
-                        return [
-                            'id' => $item->id,
-                            'title' => $item->title,
-                            'type' => $item->type,
-                            'poster_url' => $item->poster_url,
-                            'short_content' => $item->short_content,
-                            'poster_url' => asset('storage/' . $item->poster_url),
-                            'views' => $item->views
-                        ];
-                    }),
-                ];
-            })->values();
+    // public function usedCategories()
+    // {
+    //     $categories = Movie::whereNotNull('category_id')
+    //         ->with('category')
+    //         ->get()
+    //         ->pluck('category')
+    //         ->unique('id')
+    //         ->take(2)
+    //         ->map(function ($category) {
+    //             return [
+    //                 'id' => $category->id,
+    //                 'name' => $category->name,
+    //                 'movies' => $category->movies->take(6)->map(function ($item) {
+    //                     return [
+    //                         'id' => $item->id,
+    //                         'title' => $item->title,
+    //                         'type' => $item->type,
+    //                         'poster_url' => $item->poster_url,
+    //                         'short_content' => $item->short_content,
+    //                         'poster_url' => asset('storage/' . $item->poster_url),
+    //                         'views' => $item->views
+    //                     ];
+    //                 }),
+    //             ];
+    //         })->values();
 
-        return $categories;
-    }
+    //     return $categories;
+    // }
 }

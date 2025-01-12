@@ -28,7 +28,6 @@ class MovieFactory extends Factory
             'poster_url' => 'images/poster2.jpg',
             'video_url' => 'https://vimeo.com/1021066385',
             'region_id' => '1',
-            'type' => $types[array_rand($types)],
             'is_active' => '1',
             'views' => fake()->numberBetween(1, 1000),
         ];

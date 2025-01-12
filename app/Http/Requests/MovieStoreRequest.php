@@ -2,10 +2,8 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\MovieTypeEnum;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\Rules\Enum;
 
 class MovieStoreRequest extends FormRequest
 {
@@ -31,12 +29,13 @@ class MovieStoreRequest extends FormRequest
             'category_id' => ['string', 'nullable'],
             'duration' => ['integer', 'required'],
             'is_active' => ['integer', 'required'],
-            'genre' => ['string', 'required'],
+            // 'genre' => ['string', 'required'],
             'description' => ['string', 'nullable'],
             'short_content' => ['string', 'nullable'],
             'poster_url' => ['file', 'required', 'mimes:jpeg,png,jpg', 'max:5000'],
             'video_url' => ['string', 'max:255', 'required'],
-            'type' => ['string', new Enum(MovieTypeEnum::class)],
+            'genres' => ['array', 'nullable'],
+            'tags' => ['array', 'nullable'],
         ];
     }
 }

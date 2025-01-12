@@ -57,7 +57,7 @@ class CategoryService
                 'name' => $category->name,
             ], 201);
         } catch (\Exception $e) {
-            return Response::customJsonError('Failed to create category' . " " . $e->getMessage(), 500);
+            return Response::customJsonError('Failed to create category', 500);
         }
     }
 
@@ -71,7 +71,7 @@ class CategoryService
             $category = Category::findOrFail($id);
             return Response::customJson($category);
         } catch (\Exception $e) {
-            return Response::customJsonError('Movie not found' . " " . $e->getMessage(), 404);
+            return Response::customJsonError('Movie not found', 404);
         }
     }
 
@@ -87,7 +87,7 @@ class CategoryService
 
             return Response::customJson($category);
         } catch (\Exception $e) {
-            return Response::customJsonError('Failed to update category' . " " . $e->getMessage(), 500);
+            return Response::customJsonError('Failed to update category', 500);
         }
     }
 
@@ -103,7 +103,7 @@ class CategoryService
 
             return Response::customJson(['message' => 'Series deleted successfully']);
         } catch (\Exception $e) {
-            return Response::customJsonError('Failed to delete category' . " " . $e->getMessage(), 500);
+            return Response::customJsonError('Failed to delete category', 500);
         }
     }
 

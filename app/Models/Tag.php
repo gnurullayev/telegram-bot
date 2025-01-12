@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
 class Tag extends Model
 {
+    use HasFactory, HasSlug;
 
     protected $table = "tags";
 
@@ -25,6 +28,17 @@ class Tag extends Model
         return SlugOptions::create()
             ->generateSlugsFrom(['name', 'id'])
             ->saveSlugsTo('slug');
+    }
+
+    /**
+     * Scope a query to only include active tags.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeIsActive($query)
+    {
+        return $query->where('is_active', 1);
     }
 
 

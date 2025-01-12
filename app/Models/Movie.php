@@ -45,16 +45,13 @@ class Movie extends Model
         'duration',
         'description',
         'short_content',
-        'type',
         'poster_url',
         'video_url',
-        'country_id',
-        'series_id',
+        'region_id',
         'category_id',
-        'genre',
         'is_active',
         'views',
-        'slug'
+        'slug',
     ];
 
     /**
@@ -66,6 +63,18 @@ class Movie extends Model
             ->generateSlugsFrom(['title', 'id'])
             ->saveSlugsTo('slug');
     }
+
+    /**
+     * Scope a query to only include active tags.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeIsActive($query)
+    {
+        return $query->where('is_active', 1);
+    }
+
 
     public function newEloquentBuilder($query)
     {
@@ -97,7 +106,7 @@ class Movie extends Model
     {
         return $this->belongsToMany(
             Genre::class,
-            'movies_tags',
+            'movies_genres',
             'movie_id',
             'genre_id'
         );

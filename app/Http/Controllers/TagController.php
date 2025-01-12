@@ -2,19 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\MovieTypeEnum;
 use App\Http\Requests\CategoryStoreRequest;
 use App\Http\Requests\CategoryUpdateRequest;
-use App\Models\Movie;
-use App\Services\CategoryService;
+use App\Models\Tag;
+use App\Services\TagsService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 
-class CategoryController extends Controller
+class TagController extends Controller
 {
     public function __construct(
-        private CategoryService $categoryService
+        private TagsService $tagService
     ) {}
 
     /**
@@ -31,7 +30,7 @@ class CategoryController extends Controller
             'ot' => $params->get('ot', 'desc'),
         ]);
 
-        return $this->categoryService->index($params);
+        return $this->tagService->index($params);
     }
 
     /**
@@ -39,7 +38,7 @@ class CategoryController extends Controller
      */
     public function store(CategoryStoreRequest $request): mixed
     {
-        return $this->categoryService->store($request);
+        return $this->tagService->store($request);
     }
 
     /**
@@ -48,7 +47,7 @@ class CategoryController extends Controller
     public function show(string $id): mixed
     {
 
-        return $this->categoryService->show($id);
+        return $this->tagService->show($id);
     }
 
     /**
@@ -56,7 +55,7 @@ class CategoryController extends Controller
      */
     public function update(CategoryUpdateRequest $request, string $id)
     {
-        return $this->categoryService->update($request, $id);
+        return $this->tagService->update($request, $id);
     }
 
     /**
@@ -64,24 +63,20 @@ class CategoryController extends Controller
      */
     public function destroy(string $id): mixed
     {
-        return $this->categoryService->destroy($id);
+        return $this->tagService->destroy($id);
     }
 
-    public function categoriesForSelect(): mixed
+    public function tagsForSelect(): mixed
     {
-        $moviesCategories = Movie::whereNotNull('category_id')
-            ->with('category')
-            ->get()
-            ->pluck(['category'])
-            ->unique('id')
-            ->values();
+        $moviesCategories = Tag::query()
+            ->isActive()
+            ->get();
 
 
         $moviesCategoriesMapping = $moviesCategories->map(function ($item) {
             return [
                 'value' => (string) $item->id,
                 'label' => $item->name,
-                'type' => MovieTypeEnum::MOVIE->value,
             ];
         });
 
@@ -90,9 +85,9 @@ class CategoryController extends Controller
         return Response::customJson($moviesCategoriesMapping);
     }
 
-    public function usedCategories()
-    {
-        $categories = $this->categoryService->usedCategories();
-        return Response::customJson($categories);
-    }
+    // public function usedCategories()
+    // {
+    //     $categories = $this->tagService->usedCategories();
+    //     return Response::customJson($categories);
+    // }
 }

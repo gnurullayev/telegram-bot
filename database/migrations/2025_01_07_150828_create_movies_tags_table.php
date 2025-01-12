@@ -18,10 +18,11 @@ return new class extends Migration
             $table->foreign('movie_id')
                 ->references('id')
                 ->on('movies')->onDelete('cascade');
-            $table->bigInteger('genre_id');
-            $table->foreign('genre_id')
+            $table->bigInteger('tag_id');
+            $table->foreign('tag_id')
                 ->references('id')
-                ->on('genres')->onDelete('cascade');
+                ->on('tags')->onDelete('cascade');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

@@ -23,9 +23,9 @@ return new class extends Migration
             $table->string("video_url");
             $table->boolean('is_active')->default(false);
             $table->unsignedBigInteger('views')->default(0);
-            $table->enum('type', ['movie', 'series']);
             $table->foreignId('region_id')->constrained()->onDelete('cascade');
             $table->foreignId('category_id')->nullable()->constrained()->onDelete('cascade');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
