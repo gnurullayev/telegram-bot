@@ -109,32 +109,39 @@ class TagsService
     }
 
 
-    // public function usedCategories()
-    // {
-    //     $categories = Movie::whereNotNull('category_id')
-    //         ->with('category')
-    //         ->get()
-    //         ->pluck('category')
-    //         ->unique('id')
-    //         ->take(2)
-    //         ->map(function ($category) {
-    //             return [
-    //                 'id' => $category->id,
-    //                 'name' => $category->name,
-    //                 'movies' => $category->movies->take(6)->map(function ($item) {
-    //                     return [
-    //                         'id' => $item->id,
-    //                         'title' => $item->title,
-    //                         'type' => $item->type,
-    //                         'poster_url' => $item->poster_url,
-    //                         'short_content' => $item->short_content,
-    //                         'poster_url' => asset('storage/' . $item->poster_url),
-    //                         'views' => $item->views
-    //                     ];
-    //                 }),
-    //             ];
-    //         })->values();
+    public function usedTags()
+    {
+        // Teglarni olish
+        $tags = Tag::whereHas('movies', function ($query) {})
+            ->get()
+            ->map(function ($tag) {
+                return [
+                    'id' => $tag->id,
+                    'name' => $tag->name,
+                    'slug' => $tag->slug,
+                ];
+            });
 
-    //     return $categories;
-    // }
+        return $tags;
+    }
+    public function moviesByTag(string $slug)
+    {
+        // Kategoriya va filmlarni olish
+        $tag = Tag::query()
+            ->where('slug', $slug)
+            ->firstOrFail();
+
+        // Filmlarni paginatsiya qilish
+        $movies = $tag->movies()->paginate(20); // Har bir sahifada 20 ta film
+
+        // Kategoriya va paginatsiyalangan filmlar bilan natijani qaytarish
+        return [
+            'tag' => [
+                'id' => $tag->id,
+                'name' => $tag->name,
+                'slug' => $tag->slug
+            ],
+            'movies' => $movies,
+        ];
+    }
 }

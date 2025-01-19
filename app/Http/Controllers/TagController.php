@@ -85,9 +85,15 @@ class TagController extends Controller
         return Response::customJson($moviesCategoriesMapping);
     }
 
-    // public function usedCategories()
-    // {
-    //     $categories = $this->tagService->usedCategories();
-    //     return Response::customJson($categories);
-    // }
+    public function usedTags()
+    {
+        $tags = $this->tagService->usedTags();
+        return Response::customJson($tags);
+    }
+
+    public function moviesByTag(string $slug)
+    {
+        $tags = $this->tagService->moviesByTag($slug);
+        return Response::customJson($tags);
+    }
 }

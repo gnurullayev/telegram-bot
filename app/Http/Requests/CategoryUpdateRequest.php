@@ -25,6 +25,9 @@ class CategoryUpdateRequest extends FormRequest
         return [
             'id' => ['numeric', 'required'],
             'name' => ['string', 'max:255', 'required'],
+            'description' => ['string', 'nullable'],
+            'short_content' => ['string', 'nullable'],
+            'poster_url' => ['file', 'nullable', 'mimes:jpeg,png,jpg', 'max:5000'],
             'is_active' => ['integer', 'required'],
         ];
     }

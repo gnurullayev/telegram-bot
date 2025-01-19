@@ -95,4 +95,9 @@ class CategoryController extends Controller
         $categories = $this->categoryService->usedCategories();
         return Response::customJson($categories);
     }
+    public function moviesByCategory(string $slug)
+    {
+        $categories = $this->categoryService->moviesByCategory($slug);
+        return Response::customJson($categories);
+    }
 }

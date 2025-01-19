@@ -20,6 +20,7 @@ class Category extends Model
         'is_active',
         'short_content',
         'description',
+        'poster_url',
         'slug'
     ];
 

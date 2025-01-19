@@ -21,10 +21,13 @@ Route::prefix('v1')->group(function () {
     Route::get('all-genres', [GenreController::class, "genresForSelect"]);
 
     Route::get('used-categories', [CategoryController::class, "usedCategories"]);
+    Route::get('used-tags', [TagController::class, "usedTags"]);
+    Route::get('movies-by-category/{slug}', [CategoryController::class, "moviesByCategory"]);
+    Route::get('movies-by-tag/{slug}', [TagController::class, "moviesByTag"]);
     Route::get('movies-search', [MovieController::class, "search"]);
     Route::get('home', [HomeController::class, "index"]);
     Route::get('all-movies/{id}', [MovieController::class, "moviesByCategory"]);
-    Route::get('movie-detail/{id}/{key}', [MovieController::class, "movieDetail"]);
+    Route::get('movie-detail/{slug}', [MovieController::class, "movieDetail"]);
 
     Route::post('/upload', [FileUploadController::class, 'upload']);
 

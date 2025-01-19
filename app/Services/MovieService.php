@@ -3,7 +3,6 @@
 
 namespace App\Services;
 
-use App\Enums\MovieTypeEnum;
 use App\Http\Requests\MovieStoreRequest;
 use App\Http\Requests\MovieUpdateRequest;
 use App\Models\Movie;
@@ -175,10 +174,10 @@ class MovieService
         return  Response::customJson($movies, 200);
     }
 
-    public function movieDetail(int $id, string $key)
+    public function movieDetail(string $slug)
     {
 
-        $movie = $this->movieRepository->publicMovieById($id, $key);
+        $movie = $this->movieRepository->publicMovieById($slug);
 
         return  Response::customJson($movie, 200);
     }
@@ -186,55 +185,6 @@ class MovieService
     public function topMovies()
     {
         $movies = $this->movieRepository->topMovies();
-        $moviesMapping = $movies->map(function ($item) {
-            return [
-                'id' => $item->id,
-                'title' => $item->title,
-                'duration' => $item->duration,
-                'description' => $item->description,
-                'type' => $item->type,
-                'poster_url' => asset('storage/' . $item->poster_url),
-                'views' => $item->views
-            ];
-        });
-        return $moviesMapping;
-    }
-
-    /**
-     * @param  int $id
-     * @param  string $key
-     * @param  int $perPage
-     * @param  int $page
-     * @return array
-     */
-    public function moviesByCategory(int $id, string $key, int $perPage = 10)
-    {
-        $category = $this->movieRepository->movieCategory($id);
-
-        if ($key === MovieTypeEnum::MOVIE->value) {
-            $moviesData = $category->movies()->orderBy('created_at', 'desc')->paginate($perPage);
-        } else {
-            $moviesData = new \Illuminate\Pagination\LengthAwarePaginator([], 0, $perPage);
-        }
-
-        // `data` maydonidagi ma'lumotlarni xaritada qayta ishlash
-        $moviesData->getCollection()->transform(function ($item) {
-            return [
-                'id' => $item->id,
-                'title' => $item->title,
-                'description' => $item->description,
-                'type' => $item->type,
-                'poster_url' => asset('storage/' . $item->poster_url),
-                'views' => $item->views,
-            ];
-        });
-
-        return [
-            "id" => $category->id,
-            "name" => $category->name,
-            "short_content" => $category->short_content,
-            "description" => $category->description,
-            'movies_data' => $moviesData,
-        ];
+        return $movies;
     }
 }
