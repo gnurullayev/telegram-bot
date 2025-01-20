@@ -92,7 +92,7 @@ class MovieRepository extends BaseRepository
         $otherCategoryMovies = null;
 
 
-        $movieDetail = Movie::query()->where('slug',  operator: $slug)->with(['category.movies', 'country'])->get()->firstOrFail();
+        $movieDetail = Movie::query()->where('slug',  operator: $slug)->with(['category.movies', 'region'])->get()->firstOrFail();
 
         $movieDetail->views += 1;
         $movieDetail->save();
@@ -121,11 +121,14 @@ class MovieRepository extends BaseRepository
             'duration' => $movieDetail->duration,
             'short_content' => $movieDetail->short_content,
             'description' => $movieDetail->description,
+            'video_url' => $movieDetail->video_url,
             'poster_url' =>  asset('storage/' . $movieDetail->poster_url),
             'views' => $movieDetail->views,
             'category_id' => $movieDetail->category_id,
+            'category_name' => $movieDetail->category_name,
+            'region_id' => $movieDetail->region_id,
+            'region_name' => $movieDetail->region_name,
             'other_movies' => $otherCategoryMovies,
-
         ];
     }
 
@@ -148,6 +151,7 @@ class MovieRepository extends BaseRepository
                 'duration' => $movie->duration,
                 'poster_url' =>  asset('storage/' . $movie->poster_url),
                 'views' => $movie->views,
+                'slug' => $movie->slug,
                 'category_id' => $movie->category_id,
             ];
         });
