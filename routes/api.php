@@ -4,9 +4,9 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\FileUploadController;
-use App\Http\Controllers\GenreController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MovieController;
+use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\TagController;
 use Illuminate\Support\Facades\Route;
 
@@ -18,7 +18,6 @@ Route::prefix('v1')->group(function () {
     Route::get('countries', [CountryController::class, "index"]);
     Route::get('all-categories', [CategoryController::class, "categoriesForSelect"]);
     Route::get('all-tags', [TagController::class, "tagsForSelect"]);
-    Route::get('all-genres', [GenreController::class, "genresForSelect"]);
 
     Route::get('used-categories', [CategoryController::class, "usedCategories"]);
     Route::get('used-tags', [TagController::class, "usedTags"]);
@@ -28,7 +27,7 @@ Route::prefix('v1')->group(function () {
     Route::get('home', [HomeController::class, "index"]);
     Route::get('all-movies/{id}', [MovieController::class, "moviesByCategory"]);
     Route::get('movie-detail/{slug}', [MovieController::class, "movieDetail"]);
-
+    Route::get('sitemaps', [SitemapController::class, "index"]);
     Route::post('/upload', [FileUploadController::class, 'upload']);
 
 
@@ -42,6 +41,5 @@ Route::prefix('v1')->group(function () {
 
         Route::apiResource('categories', CategoryController::class);
         Route::apiResource('tags', TagController::class);
-        Route::apiResource('genres', GenreController::class);
     });
 });

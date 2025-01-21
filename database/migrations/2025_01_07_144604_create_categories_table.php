@@ -18,6 +18,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->string('poster_url');
             $table->string('slug')->unique();
+            $table->string('link')->nullable();
             $table->boolean('is_active')->default(false);
             $table->softDeletes();
             $table->timestamps();

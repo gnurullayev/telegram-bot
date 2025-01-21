@@ -102,13 +102,8 @@ class Movie extends Model
         );
     }
 
-    public function genres(): BelongsToMany
+    public function movieCode()
     {
-        return $this->belongsToMany(
-            Genre::class,
-            'movies_genres',
-            'movie_id',
-            'genre_id'
-        );
+        return $this->hasOne(MovieCode::class);
     }
 }

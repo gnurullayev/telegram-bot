@@ -54,9 +54,9 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(CategoryUpdateRequest $request, string $id)
+    public function update(CategoryUpdateRequest $request)
     {
-        return $this->categoryService->update($request, $id);
+        return $this->categoryService->update($request);
     }
 
     /**

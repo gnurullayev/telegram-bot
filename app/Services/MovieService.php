@@ -6,6 +6,8 @@ namespace App\Services;
 use App\Http\Requests\MovieStoreRequest;
 use App\Http\Requests\MovieUpdateRequest;
 use App\Models\Movie;
+use App\Models\MovieCode;
+use App\Models\Sitemap;
 use App\Repositories\MovieRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -41,7 +43,13 @@ class MovieService
                 'type' => $item->type,
                 'poster_url' => asset('storage/' . $item->poster_url),
                 'country_id' => $item->country_id,
+                'video_url' => $item->video_url,
                 'is_active' => $item->is_active,
+                'movieCode' => $item->movieCode ? [
+                    'id' => $item->movieCode['id'],
+                    'link' => $item->movieCode->link,
+                    'movie_id' => $item->movieCode->movie_id
+                ] : null
             ];
         });
 
@@ -60,7 +68,7 @@ class MovieService
     public function show($id)
     {
         try {
-            $movie = Movie::query()->where("id", $id)->with(['tags:id', 'genres:id'])->get()->first();
+            $movie = Movie::query()->where("id", $id)->with(['tags:id'])->get()->first();
             // Custom tags_data uchun
             $tagsData = [];
             foreach ($movie->tags as $tag) {
@@ -89,13 +97,6 @@ class MovieService
             }
 
             $movie = Movie::create($validated);
-
-            if (!empty($validated["genres"])) {
-                foreach ($validated["genres"] as $genre) {
-                    $movie->genres()->attach($genre);
-                }
-            }
-
             if (!empty($validated["tags"])) {
                 foreach ($validated["tags"] as $tag) {
                     $movie->tags()->attach($tag);
@@ -129,16 +130,38 @@ class MovieService
                 $validated['poster_url'] = $posterPath;
             }
 
-            if (!empty($validated["genres"])) {
-                $movie->genres()->syncWithoutDetaching($validated["genres"]);
-            }
-
             if (!empty($validated["tags"])) {
                 $movie->tags()->syncWithoutDetaching($validated["tags"]);
             }
 
-            $movie->update($validated);
+            $movieCode = MovieCode::where('movie_id', $movie->id)->first();
+            if ($movieCode) {
+                $movieCode->update([
+                    'link' => $validated['link'],
+                ]);
+            } else {
+                MovieCode::create([
+                    'link' => $validated['link'],
+                    'movie_id' => $movie->id,
+                ]);
+            }
 
+            $sitemap = Sitemap::where('url', $movieCode->link)->first();
+            if ($sitemap) {
+                $sitemap->update([
+                    'url' => $movieCode->link,
+                    'lastmod' => $movieCode->updated_at,
+                ]);
+            } else {
+                Sitemap::create([
+                    'url' => $movieCode->link,
+                    'lastmod' => $movieCode->created_at,
+                    'changefreq' => "weekly",
+                    'priority' => "0.9",
+                ]);
+            }
+
+            $movie->update($validated);
 
             return Response::customJson($movie);
         } catch (\Exception $e) {

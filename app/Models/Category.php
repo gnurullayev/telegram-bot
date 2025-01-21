@@ -21,6 +21,7 @@ class Category extends Model
         'short_content',
         'description',
         'poster_url',
+        'link',
         'slug'
     ];
 

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CategoryStoreRequest;
-use App\Http\Requests\CategoryUpdateRequest;
+use App\Http\Requests\TagStoreRequest;
+use App\Http\Requests\TagUpdateRequest;
 use App\Models\Tag;
 use App\Services\TagsService;
 use Illuminate\Http\JsonResponse;
@@ -36,7 +36,7 @@ class TagController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(CategoryStoreRequest $request): mixed
+    public function store(TagStoreRequest $request): mixed
     {
         return $this->tagService->store($request);
     }
@@ -53,7 +53,7 @@ class TagController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(CategoryUpdateRequest $request, string $id)
+    public function update(TagUpdateRequest $request, string $id)
     {
         return $this->tagService->update($request, $id);
     }

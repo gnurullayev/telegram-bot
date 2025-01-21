@@ -92,7 +92,7 @@ class MovieRepository extends BaseRepository
         $otherCategoryMovies = null;
 
 
-        $movieDetail = Movie::query()->where('slug',  operator: $slug)->with(['category.movies', 'region'])->get()->firstOrFail();
+        $movieDetail = Movie::query()->where('slug',  operator: $slug)->with(['category.movies', 'country'])->get()->firstOrFail();
 
         $movieDetail->views += 1;
         $movieDetail->save();
@@ -126,8 +126,8 @@ class MovieRepository extends BaseRepository
             'views' => $movieDetail->views,
             'category_id' => $movieDetail->category_id,
             'category_name' => $movieDetail->category_name,
-            'region_id' => $movieDetail->region_id,
-            'region_name' => $movieDetail->region_name,
+            'country_id' => $movieDetail->country_id,
+            'country_name' => $movieDetail->country_name,
             'other_movies' => $otherCategoryMovies,
         ];
     }

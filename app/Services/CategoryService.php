@@ -6,9 +6,11 @@ use App\Http\Requests\CategoryStoreRequest;
 use App\Http\Requests\CategoryUpdateRequest;
 use App\Models\Category;
 use App\Models\Movie;
+use App\Models\Sitemap;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Storage;
 
 class CategoryService
 {
@@ -49,6 +51,10 @@ class CategoryService
 
         try {
             $validated = $request->validated();
+            if ($request->hasFile('poster_url')) {
+                $posterPath = $request->file('poster_url')->store('posters', 'public');
+                $validated['poster_url'] = $posterPath;
+            }
 
             $category = Category::create($validated);
 
@@ -78,12 +84,41 @@ class CategoryService
     /**
      * Update the specified series in storage.
      */
-    public function update(CategoryUpdateRequest $request, $id)
+    public function update(CategoryUpdateRequest $request)
     {
         try {
-            $category = Category::findOrFail($id);
             $validated = $request->validated();
+            $category = Category::findOrFail($validated["id"]);
+
+            if ($request->hasFile('poster_url')) {
+                if ($category->poster_url) {
+                    Storage::disk('public')->delete($category->poster_url);
+                }
+
+                $posterPath = $request->file('poster_url')->store('posters', 'public');
+                $validated['poster_url'] = $posterPath;
+            } else {
+                $validated['poster_url'] = $category->poster_url;
+            }
+
             $category->update($validated);
+
+            $sitemap = Sitemap::where('url', $category->link)->first();
+
+            if ($sitemap) {
+                $sitemap->update([
+                    'url' => $validated['link'],
+                    'lastmod' => $category->updated_at,
+                ]);
+            } else {
+                Sitemap::create([
+                    'url' => $validated['link'],
+                    'lastmod' => $category->created_at,
+                    'changefreq' => "weekly",
+                    'priority' => "0.9",
+                ]);
+            }
+
 
             return Response::customJson($category);
         } catch (\Exception $e) {

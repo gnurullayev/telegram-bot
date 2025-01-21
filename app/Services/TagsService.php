@@ -4,6 +4,8 @@ namespace App\Services;
 
 use App\Http\Requests\CategoryStoreRequest;
 use App\Http\Requests\CategoryUpdateRequest;
+use App\Http\Requests\TagStoreRequest;
+use App\Http\Requests\TagUpdateRequest;
 use App\Models\Category;
 use App\Models\Movie;
 use App\Models\Tag;
@@ -45,7 +47,7 @@ class TagsService
     /**
      * Store a newly created series in storage.
      */
-    public function store(CategoryStoreRequest $request): mixed
+    public function store(TagStoreRequest $request): mixed
     {
 
         try {
@@ -79,7 +81,7 @@ class TagsService
     /**
      * Update the specified series in storage.
      */
-    public function update(CategoryUpdateRequest $request, $id)
+    public function update(TagUpdateRequest $request, $id)
     {
         try {
             $tag = Tag::findOrFail($id);
