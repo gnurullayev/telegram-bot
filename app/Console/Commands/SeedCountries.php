@@ -4,7 +4,6 @@ namespace App\Console\Commands;
 
 use App\Models\Region;
 use Illuminate\Console\Command;
-use DB;
 
 class SeedCountries extends Command
 {
@@ -229,7 +228,7 @@ class SeedCountries extends Command
         ];
 
         foreach ($countries as $country) {
-            Region::insert(['name' => $country]);
+            Region::create(['name' => $country, 'is_active' => true]);
         }
 
         $this->info('Countries seeded successfully!');
