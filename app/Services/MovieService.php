@@ -68,7 +68,7 @@ class MovieService
     public function show($id)
     {
         try {
-            $movie = Movie::query()->where("id", $id)->with(['tags:id'])->get()->first();
+            $movie = Movie::query()->where("id", $id)->with(['tags:id', "movieCode"])->get()->first();
             // Custom tags_data uchun
             $tagsData = [];
             foreach ($movie->tags as $tag) {
@@ -77,6 +77,7 @@ class MovieService
 
             // Qo'shimcha ma'lumotni $movie modeliga qo'shish
             $movie->setAttribute('tags_data', $tagsData);
+            $movie->setAttribute('link', $movie->movieCode ? $movie->movieCode->link : null);
             return Response::customJson($movie);
         } catch (\Exception $e) {
             return Response::customJsonError('Movie not found' . " " . $e->getMessage(), 404);
@@ -135,16 +136,10 @@ class MovieService
             }
 
             $movieCode = MovieCode::where('movie_id', $movie->id)->first();
-            if ($movieCode) {
-                $movieCode->update([
-                    'link' => $validated['link'],
-                ]);
-            } else {
-                MovieCode::create([
-                    'link' => $validated['link'],
-                    'movie_id' => $movie->id,
-                ]);
-            }
+            $movieCode = MovieCode::firstOrCreate(
+                ['movie_id' => $movie->id], // Qidirish shartlari
+                ['link' => $validated['link']] // Yangi yozuv yaratishda qo'llaniladigan ma'lumotlar
+            );
 
             $sitemap = Sitemap::where('url', $movieCode->link)->first();
             if ($sitemap) {

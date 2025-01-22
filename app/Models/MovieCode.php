@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id
  * @property string|null $link
  * @property int|null $movie_id
- * @property int|null $series_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  */
@@ -22,7 +21,6 @@ class MovieCode extends Model
     protected $fillable = [
         'link',
         'movie_id',
-        'series_id'
     ];
 
     protected $table = "movie_codes";

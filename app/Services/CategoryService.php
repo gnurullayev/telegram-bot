@@ -30,10 +30,22 @@ class CategoryService
         $query->orderBy('created_at', $params->get('ot'));
 
         $totalItems = $query->count();
+        // $categories = $query->skip(($params->get('pi') - 1) * $params->get('ps'))
+        //     ->take($params->get('ps'))
+        //     ->get();
+
         $categories = $query->skip(($params->get('pi') - 1) * $params->get('ps'))
             ->take($params->get('ps'))
-            ->get();
-
+            ->get()
+            ->map(function ($category) {
+                return [
+                    "id" => $category->id,
+                    "name" => $category->name,
+                    "poster_url" => asset('storage/' . $category->poster_url),
+                    "is_active" => $category->is_active,
+                    "link" => $category->link,
+                ];
+            });
         return Response::customJson([
             'totalItems' => $totalItems,
             'currentPage' => $params->get('pi'),
@@ -75,6 +87,7 @@ class CategoryService
 
         try {
             $category = Category::findOrFail($id);
+            $category->poster_url = asset('storage/' . $category->poster_url);
             return Response::customJson($category);
         } catch (\Exception $e) {
             return Response::customJsonError('Movie not found' . " " . $e->getMessage(), 404);

@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Str;
 
 class CategoryUpdateRequest extends FormRequest
 {
@@ -22,6 +23,10 @@ class CategoryUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
+        \Log::info('Input Data: ' . json_encode(request()->input()));
+        \Log::info('Raw Body Data: ' . request()->getContent());
+        \Log::info(json_encode(request()->all()));
+        \Log::info('Request Data: ', request()->all());
         return [
             'id' => ['numeric', 'required'],
             'name' => ['string', 'max:255', 'required'],

@@ -8,6 +8,7 @@ use App\Http\Requests\TagStoreRequest;
 use App\Http\Requests\TagUpdateRequest;
 use App\Models\Category;
 use App\Models\Movie;
+use App\Models\Sitemap;
 use App\Models\Tag;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Response;
@@ -86,6 +87,21 @@ class TagsService
         try {
             $tag = Tag::findOrFail($id);
             $validated = $request->validated();
+            $sitemap = Sitemap::where('url', $validated['link'])->first();
+
+            if ($sitemap) {
+                $sitemap->update([
+                    'url' => $validated['link'],
+                    'lastmod' => $tag->updated_at,
+                ]);
+            } else {
+                Sitemap::create([
+                    'url' => $validated['link'],
+                    'lastmod' => $tag->created_at,
+                    'changefreq' => "weekly",
+                    'priority' => "0.9",
+                ]);
+            }
             $tag->update($validated);
 
             return Response::customJson($tag);

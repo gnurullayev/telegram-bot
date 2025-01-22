@@ -39,6 +39,7 @@ Route::prefix('v1')->group(function () {
         Route::post('movies/update', [MovieController::class, 'update']);
         Route::apiResource('movies', MovieController::class);
 
+        Route::post('categories/update', [CategoryController::class, 'update']);
         Route::apiResource('categories', CategoryController::class);
         Route::apiResource('tags', TagController::class);
     });
