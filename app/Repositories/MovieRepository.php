@@ -58,14 +58,13 @@ class MovieRepository extends BaseRepository
             $query->where('title', 'LIKE', "%{$searchQuery}%")
                 ->orWhere('description', 'LIKE', "%{$searchQuery}%")
                 ->orWhere('rating', 'LIKE', "%{$searchQuery}%")
-                ->orWhere('type', 'LIKE', "%{$searchQuery}%")
-                ->orWhereHas('region', function ($q) use ($searchQuery) {
+                ->orWhereHas('country', function ($q) use ($searchQuery) {
                     $q->where('name', 'LIKE', "%{$searchQuery}%");
                 })
                 ->orWhereHas('category', function ($q) use ($searchQuery) {
                     $q->where('name', 'LIKE', "%{$searchQuery}%");
                 });
-        })->with(['regions', 'category'])
+        })->with(['country', 'category'])
             ->paginate(10)
             ->through(function ($movie) {
                 return [
@@ -73,9 +72,10 @@ class MovieRepository extends BaseRepository
                     'title' => $movie->title,
                     'duration' => $movie->duration,
                     'description' => $movie->description,
-                    'type' => $movie->type,
                     'poster_url' => asset('storage/' . $movie->poster_url),
-                    'views' => $movie->views
+                    'views' => $movie->views,
+                    'slug' => $movie->slug,
+
                 ];
             });
 
@@ -83,19 +83,16 @@ class MovieRepository extends BaseRepository
     }
 
     /**
-     * @param  int $id
-     * @param  string $id
+     * @param  string $slug
      * @return LengthAwarePaginator<int, Movie>
      */
-    public function publicMovieById(int $id, string $key): array
+    public function publicMovieById(string $slug): array
     {
 
-        $otherSerials = null;
         $otherCategoryMovies = null;
-        $serialsParts = null;
 
 
-        $movieDetail = Movie::query()->where('id',  operator: $id)->with(['category.movies', 'region'])->get()->firstOrFail();
+        $movieDetail = Movie::query()->where('slug',  operator: $slug)->with(['category.movies', 'country'])->get()->firstOrFail();
 
         $movieDetail->views += 1;
         $movieDetail->save();
@@ -109,19 +106,14 @@ class MovieRepository extends BaseRepository
                         'id' => $item->id,
                         'title' => $item->title,
                         'duration' => $item->duration,
-                        'description' => $item->description,
-                        'type' => $item->type,
                         'poster_url' => asset('storage/' . $item->poster_url),
                         'views' => $item->views,
+                        'slug' => $item->slug,
                         'release_date' => $item->release_date
                     ];
                 });
         }
 
-
-        // return ($movieDetail);
-
-        $otherMovies =   $otherSerials ?  $otherSerials : $otherCategoryMovies;
         return [
             'id' => $movieDetail->id,
             'title' => $movieDetail->title,
@@ -129,30 +121,40 @@ class MovieRepository extends BaseRepository
             'duration' => $movieDetail->duration,
             'short_content' => $movieDetail->short_content,
             'description' => $movieDetail->description,
+            'video_url' => $movieDetail->video_url,
             'poster_url' =>  asset('storage/' . $movieDetail->poster_url),
-            'genre' => $movieDetail->genre,
             'views' => $movieDetail->views,
-            'type' => $movieDetail->type,
-            'region_id' => $movieDetail->region_id,
-            'region_name' => $movieDetail->region->name,
             'category_id' => $movieDetail->category_id,
-            'other_movies' => $otherMovies,
-
+            'category_name' => $movieDetail->category_name,
+            'country_id' => $movieDetail->country_id,
+            'country_name' => $movieDetail->country_name,
+            'other_movies' => $otherCategoryMovies,
         ];
     }
 
     /**
-     * @return Collection<int, Movie>
+     * @return LengthAwarePaginator<int, Movie>
      */
-    public function topMovies(): Collection
+    public function topMovies(): LengthAwarePaginator
     {
         $movies = Movie::query()
-            ->where('type', MovieTypeEnum::MOVIE->value)
             ->active()
             ->with(['country'])
             ->orderBy('views', 'desc')
-            ->get()
-            ->take(6);
+            ->paginate(20);
+
+        // Har bir filmni formatlash uchun map ishlatamiz
+        $movies->getCollection()->transform(function ($movie) {
+            return [
+                'id' => $movie->id,
+                'title' => $movie->title,
+                'duration' => $movie->duration,
+                'poster_url' =>  asset('storage/' . $movie->poster_url),
+                'views' => $movie->views,
+                'slug' => $movie->slug,
+                'category_id' => $movie->category_id,
+            ];
+        });
 
         return $movies;
     }
@@ -163,7 +165,23 @@ class MovieRepository extends BaseRepository
      */
     public function movieCategory(int $id)
     {
-        $movieCategory = Category::query()->where('id', $id)->with(['movies'])->first();
+        $movieCategory = Category::query()
+            ->where('id', $id)
+            ->with(['movies'])
+            ->first();
+
+        if ($movieCategory) {
+            // Movies kolleksiyasini map yordamida qayta ishlash
+            $movieCategory->movies = $movieCategory->movies->map(function ($movie) {
+                return [
+                    'id' => $movie->id,
+                    'title' => $movie->title,
+                    'views' => $movie->views,
+                    'duration' => $movie->duration,
+                    'poster_url' => $movie->poster_url ? asset('storage/' . $movie->poster_url) : null,
+                ];
+            });
+        }
 
         return $movieCategory;
     }

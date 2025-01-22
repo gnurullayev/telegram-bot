@@ -75,19 +75,8 @@ class MovieController extends Controller
     /**
      * get public movie
      */
-    public function movieDetail(Request $request, int $id, string $key): mixed
+    public function movieDetail(Request $request, string $slug): mixed
     {
-        return $this->movieService->movieDetail($id, $key);
-    }
-
-    /**
-     * get public all movies
-     */
-    public function moviesByCategory(Request $request, int $id): mixed
-    {
-        $key = $request['key'] ? $request['key'] : "";
-
-        $movies = $this->movieService->moviesByCategory($id, $key);
-        return Response::customJson($movies);
+        return $this->movieService->movieDetail($slug);
     }
 }

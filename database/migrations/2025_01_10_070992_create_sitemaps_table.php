@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('genres', function (Blueprint $table) {
+        Schema::create('sitemaps', function (Blueprint $table) {
             $table->id();
-            $table->string("name");
-            $table->string('slug')->unique();
-            $table->boolean('is_active')->default(false);
-            $table->softDeletes();
+            $table->string('url')->unique();
+            $table->date('lastmod')->nullable();
+            $table->string('changefreq')->nullable();
+            $table->decimal('priority', 2, 1)->default(0.8);
             $table->timestamps();
         });
     }
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('genres');
+        Schema::dropIfExists('sitemaps');
     }
 };

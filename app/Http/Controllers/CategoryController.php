@@ -54,9 +54,9 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(CategoryUpdateRequest $request, string $id)
+    public function update(CategoryUpdateRequest $request)
     {
-        return $this->categoryService->update($request, $id);
+        return $this->categoryService->update($request);
     }
 
     /**
@@ -93,6 +93,11 @@ class CategoryController extends Controller
     public function usedCategories()
     {
         $categories = $this->categoryService->usedCategories();
+        return Response::customJson($categories);
+    }
+    public function moviesByCategory(string $slug)
+    {
+        $categories = $this->categoryService->moviesByCategory($slug);
         return Response::customJson($categories);
     }
 }

@@ -34,7 +34,6 @@ class MovieStoreRequest extends FormRequest
             'short_content' => ['string', 'nullable'],
             'poster_url' => ['file', 'required', 'mimes:jpeg,png,jpg', 'max:5000'],
             'video_url' => ['string', 'max:255', 'required'],
-            'genres' => ['array', 'nullable'],
             'tags' => ['array', 'nullable'],
         ];
     }

@@ -6,9 +6,11 @@ use App\Http\Requests\CategoryStoreRequest;
 use App\Http\Requests\CategoryUpdateRequest;
 use App\Models\Category;
 use App\Models\Movie;
+use App\Models\Sitemap;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Storage;
 
 class CategoryService
 {
@@ -49,6 +51,10 @@ class CategoryService
 
         try {
             $validated = $request->validated();
+            if ($request->hasFile('poster_url')) {
+                $posterPath = $request->file('poster_url')->store('posters', 'public');
+                $validated['poster_url'] = $posterPath;
+            }
 
             $category = Category::create($validated);
 
@@ -78,12 +84,41 @@ class CategoryService
     /**
      * Update the specified series in storage.
      */
-    public function update(CategoryUpdateRequest $request, $id)
+    public function update(CategoryUpdateRequest $request)
     {
         try {
-            $category = Category::findOrFail($id);
             $validated = $request->validated();
+            $category = Category::findOrFail($validated["id"]);
+
+            if ($request->hasFile('poster_url')) {
+                if ($category->poster_url) {
+                    Storage::disk('public')->delete($category->poster_url);
+                }
+
+                $posterPath = $request->file('poster_url')->store('posters', 'public');
+                $validated['poster_url'] = $posterPath;
+            } else {
+                $validated['poster_url'] = $category->poster_url;
+            }
+
             $category->update($validated);
+
+            $sitemap = Sitemap::where('url', $category->link)->first();
+
+            if ($sitemap) {
+                $sitemap->update([
+                    'url' => $validated['link'],
+                    'lastmod' => $category->updated_at,
+                ]);
+            } else {
+                Sitemap::create([
+                    'url' => $validated['link'],
+                    'lastmod' => $category->created_at,
+                    'changefreq' => "weekly",
+                    'priority' => "0.9",
+                ]);
+            }
+
 
             return Response::customJson($category);
         } catch (\Exception $e) {
@@ -107,33 +142,58 @@ class CategoryService
         }
     }
 
-
     public function usedCategories()
     {
-        $categories = Movie::whereNotNull('category_id')
-            ->with('category')
-            ->get()
-            ->pluck('category')
-            ->unique('id')
-            ->take(2)
-            ->map(function ($category) {
-                return [
-                    'id' => $category->id,
-                    'name' => $category->name,
-                    'movies' => $category->movies->take(6)->map(function ($item) {
-                        return [
-                            'id' => $item->id,
-                            'title' => $item->title,
-                            'type' => $item->type,
-                            'poster_url' => $item->poster_url,
-                            'short_content' => $item->short_content,
-                            'poster_url' => asset('storage/' . $item->poster_url),
-                            'views' => $item->views
-                        ];
-                    }),
-                ];
-            })->values();
+        // Foydalanilgan kategoriyalarni olish (SQL darajasida unique)
+        $usedCategoryIds = Movie::whereNotNull('category_id')
+            ->pluck('category_id')
+            ->unique();
+
+        // Umumiy foydalanilgan kategoriyalar soni
+        $totalUsedCategories = $usedCategoryIds->count();
+
+        // Foydalanilgan kategoriyalarni paginate qilish
+        $categories = Category::whereIn('id', $usedCategoryIds)
+            ->paginate(20);
+
+        // Har bir kategoriyani xaritada o‘zgartirish
+        $categories->getCollection()->transform(function ($category) {
+            return [
+                'id' => $category->id,
+                'name' => $category->name,
+                'slug' => $category->slug,
+                'poster_url' => $category->poster_url,
+            ];
+        });
+
+        // Totalni to'g'irlash
+        $categories->setCollection($categories->getCollection());
+        $categories->total($totalUsedCategories);
 
         return $categories;
+    }
+
+    public function moviesByCategory(string $slug)
+    {
+        // Kategoriya va filmlarni olish
+        $category = Category::query()
+            ->where('slug', $slug)
+            ->firstOrFail();
+
+        // Filmlarni paginatsiya qilish
+        $movies = $category->movies()->paginate(20); // Har bir sahifada 20 ta film
+
+        // Kategoriya va paginatsiyalangan filmlar bilan natijani qaytarish
+        return [
+            'category' => [
+                'id' => $category->id,
+                'name' => $category->name,
+                'slug' => $category->slug,
+                "short_content" => "",
+                "description" => "",
+                'poster_url' => $category->poster_url,
+            ],
+            'movies' => $movies,
+        ];
     }
 }

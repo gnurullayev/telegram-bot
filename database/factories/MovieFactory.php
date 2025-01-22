@@ -25,7 +25,7 @@ class MovieFactory extends Factory
             'duration' => fake()->numberBetween(40, 180),
             'short_content' => fake()->text(255),
             'description' => fake()->realText(1000),
-            'poster_url' => 'images/poster2.jpg',
+            'poster_url' => fake()->imageUrl(),
             'video_url' => 'https://vimeo.com/1021066385',
             'region_id' => '1',
             'is_active' => '1',

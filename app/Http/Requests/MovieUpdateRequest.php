@@ -30,13 +30,12 @@ class MovieUpdateRequest extends FormRequest
             'category_id' => ['string', 'nullable'],
             'duration' => ['integer', 'required'],
             'is_active' => ['integer', 'required'],
-            // 'genre' => ['string', 'required'],
             'description' => ['string', 'nullable'],
             'short_content' => ['string', 'nullable'],
             'poster_url' => ['file', 'nullable', 'mimes:jpeg,png,jpg', 'max:5000'],
             'video_url' => ['string', 'max:255', 'required'],
-            'genres' => ['array', 'nullable'],
             'tags' => ['array', 'nullable'],
+            'link' => ['string', 'required'],
         ];
     }
 }
