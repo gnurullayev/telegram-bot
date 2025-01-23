@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\Movie;
 use App\Models\Sitemap;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
@@ -175,7 +176,7 @@ class CategoryService
                 'id' => $category->id,
                 'name' => $category->name,
                 'slug' => $category->slug,
-                'poster_url' => $category->poster_url,
+                'poster_url' => asset('storage/' . $category->poster_url),
             ];
         });
 
@@ -188,15 +189,28 @@ class CategoryService
 
     public function moviesByCategory(string $slug)
     {
-        // Kategoriya va filmlarni olish
         $category = Category::query()
             ->where('slug', $slug)
             ->firstOrFail();
 
-        // Filmlarni paginatsiya qilish
-        $movies = $category->movies()->paginate(20); // Har bir sahifada 20 ta film
+        /** @var LengthAwarePaginator $movies */
+        $movies = $category->movies()->paginate(20);
 
-        // Kategoriya va paginatsiyalangan filmlar bilan natijani qaytarish
+        $moviesMapped = $movies->getCollection()->map(function ($movie) {
+            return [
+                ...$movie->toArray(),
+                'poster_url' => asset('storage/' . $movie->poster_url),
+            ];
+        });
+
+        $movies = new LengthAwarePaginator(
+            $moviesMapped,
+            $movies->total(),
+            $movies->perPage(),
+            $movies->currentPage(),
+            ['path' => $movies->path()]
+        );
+
         return [
             'category' => [
                 'id' => $category->id,
@@ -204,7 +218,7 @@ class CategoryService
                 'slug' => $category->slug,
                 "short_content" => "",
                 "description" => "",
-                'poster_url' => $category->poster_url,
+                'poster_url' => asset('storage/' . $category->poster_url),
             ],
             'movies' => $movies,
         ];

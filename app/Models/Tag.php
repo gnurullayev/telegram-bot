@@ -45,11 +45,12 @@ class Tag extends Model
 
     public function movies(): BelongsToMany
     {
-        return $this->belongsToMany(
-            Movie::class,
-            'movies_tags',
-            'movie_id',
-            'tag_id'
-        );
+        return $this->belongsToMany(Movie::class, 'movies_tags');
+        //  $this->belongsToMany(
+        //     Movie::class,
+        //     'movies_tags',
+        //     'movie_id',
+        //     'tag_id'
+        // );
     }
 }

@@ -13,6 +13,7 @@ use App\Models\Tag;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class TagsService
 {
@@ -129,8 +130,8 @@ class TagsService
 
     public function usedTags()
     {
-        // Teglarni olish
-        $tags = Tag::whereHas('movies', function ($query) {})
+        // // Teglarni olish
+        $tags = Tag::whereHas('movies')
             ->get()
             ->map(function ($tag) {
                 return [
@@ -144,15 +145,28 @@ class TagsService
     }
     public function moviesByTag(string $slug)
     {
-        // Kategoriya va filmlarni olish
         $tag = Tag::query()
             ->where('slug', $slug)
             ->firstOrFail();
 
-        // Filmlarni paginatsiya qilish
-        $movies = $tag->movies()->paginate(20); // Har bir sahifada 20 ta film
+        /** @var LengthAwarePaginator $movies */
+        $movies = $tag->movies()->paginate(20);
 
-        // Kategoriya va paginatsiyalangan filmlar bilan natijani qaytarish
+        $moviesMapped = $movies->getCollection()->map(function ($movie) {
+            return [
+                ...$movie->toArray(),
+                'poster_url' => asset('storage/' . $movie->poster_url),
+            ];
+        });
+
+        $movies = new LengthAwarePaginator(
+            $moviesMapped,
+            $movies->total(),
+            $movies->perPage(),
+            $movies->currentPage(),
+            ['path' => $movies->path()]
+        );
+
         return [
             'tag' => [
                 'id' => $tag->id,
