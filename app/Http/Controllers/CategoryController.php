@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\MovieTypeEnum;
 use App\Http\Requests\CategoryStoreRequest;
 use App\Http\Requests\CategoryUpdateRequest;
+use App\Models\Category;
 use App\Models\Movie;
 use App\Services\CategoryService;
 use Illuminate\Http\JsonResponse;
@@ -69,12 +70,7 @@ class CategoryController extends Controller
 
     public function categoriesForSelect(): mixed
     {
-        $moviesCategories = Movie::whereNotNull('category_id')
-            ->with('category')
-            ->get()
-            ->pluck(['category'])
-            ->unique('id')
-            ->values();
+        $moviesCategories = Category::query()->active()->get();
 
 
         $moviesCategoriesMapping = $moviesCategories->map(function ($item) {
