@@ -29,7 +29,6 @@ class TagsService
             $query->where('name', 'LIKE', "%{$params->get('s')}%");
         }
 
-        $query->orderBy('name', $params->get('ot'));
         $query->orderBy('created_at', $params->get('ot'));
 
         $totalItems = $query->count();
@@ -171,7 +170,8 @@ class TagsService
             'tag' => [
                 'id' => $tag->id,
                 'name' => $tag->name,
-                'slug' => $tag->slug
+                'slug' => $tag->slug,
+                'link' => $tag->link
             ],
             'movies' => $movies,
         ];

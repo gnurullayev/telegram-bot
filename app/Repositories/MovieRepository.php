@@ -41,7 +41,6 @@ class MovieRepository extends BaseRepository
             $query->where('title', 'LIKE', "%{$params->get('s')}%");
         }
 
-        $query->orderBy('title', $params->get('ot'));
         $query->orderBy('created_at', $params->get('ot'));
 
         return $query;
@@ -92,7 +91,7 @@ class MovieRepository extends BaseRepository
         $otherCategoryMovies = null;
 
 
-        $movieDetail = Movie::query()->where('slug',  operator: $slug)->with(['category.movies', 'country'])->get()->firstOrFail();
+        $movieDetail = Movie::query()->where('slug',  operator: $slug)->with(['category.movies', 'country', "movieCode"])->get()->firstOrFail();
 
         $movieDetail->views += 1;
         $movieDetail->save();
@@ -126,6 +125,7 @@ class MovieRepository extends BaseRepository
             'views' => $movieDetail->views,
             'category_id' => $movieDetail->category_id,
             'category_name' => $movieDetail->category_name,
+            'link' => $movieDetail->movieCode ? $movieDetail->movieCode->link : null,
             'country_id' => $movieDetail->country_id,
             'country_name' => $movieDetail->country_name,
             'other_movies' => $otherCategoryMovies,

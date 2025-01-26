@@ -27,13 +27,9 @@ class CategoryService
             $query->where('name', 'LIKE', "%{$params->get('s')}%");
         }
 
-        $query->orderBy('name', $params->get('ot'));
         $query->orderBy('created_at', $params->get('ot'));
 
         $totalItems = $query->count();
-        // $categories = $query->skip(($params->get('pi') - 1) * $params->get('ps'))
-        //     ->take($params->get('ps'))
-        //     ->get();
 
         $categories = $query->skip(($params->get('pi') - 1) * $params->get('ps'))
             ->take($params->get('ps'))
@@ -216,8 +212,9 @@ class CategoryService
                 'id' => $category->id,
                 'name' => $category->name,
                 'slug' => $category->slug,
-                "short_content" => "",
-                "description" => "",
+                'link' => $category->link,
+                "short_description" => $category->short_content,
+                "description" => $category->description,
                 'poster_url' => asset('storage/' . $category->poster_url),
             ],
             'movies' => $movies,
