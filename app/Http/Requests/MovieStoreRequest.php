@@ -30,6 +30,7 @@ class MovieStoreRequest extends FormRequest
             'duration' => ['integer', 'required'],
             'is_active' => ['integer', 'required'],
             // 'genre' => ['string', 'required'],
+            'keywords' => ['string', 'required'],
             'description' => ['string', 'nullable'],
             'short_content' => ['string', 'nullable'],
             'poster_url' => ['file', 'required', 'mimes:jpeg,png,jpg', 'max:5000'],

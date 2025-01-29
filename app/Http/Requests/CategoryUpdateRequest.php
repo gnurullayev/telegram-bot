@@ -30,6 +30,7 @@ class CategoryUpdateRequest extends FormRequest
         return [
             'id' => ['numeric', 'required'],
             'name' => ['string', 'max:255', 'required'],
+            'keywords' => ['string', 'required'],
             'description' => ['string', 'nullable'],
             'short_content' => ['string', 'nullable'],
             'link' => ['string', 'required'],

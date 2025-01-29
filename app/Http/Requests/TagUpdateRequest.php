@@ -26,6 +26,7 @@ class TagUpdateRequest extends FormRequest
             'id' => ['numeric', 'required'],
             'name' => ['string', 'max:255', 'required'],
             'link' => ['string', 'required'],
+            'keywords' => ['string', 'required'],
             'is_active' => ['integer', 'required'],
         ];
     }

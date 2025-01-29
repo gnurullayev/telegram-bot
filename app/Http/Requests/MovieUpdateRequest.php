@@ -32,6 +32,7 @@ class MovieUpdateRequest extends FormRequest
             'is_active' => ['integer', 'required'],
             'description' => ['string', 'nullable'],
             'short_content' => ['string', 'nullable'],
+            'keywords' => ['string', 'required'],
             'poster_url' => ['file', 'nullable', 'mimes:jpeg,png,jpg', 'max:5000'],
             'video_url' => ['string', 'max:255', 'required'],
             'tags' => ['array', 'nullable'],

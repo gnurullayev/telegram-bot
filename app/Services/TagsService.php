@@ -2,12 +2,8 @@
 
 namespace App\Services;
 
-use App\Http\Requests\CategoryStoreRequest;
-use App\Http\Requests\CategoryUpdateRequest;
 use App\Http\Requests\TagStoreRequest;
 use App\Http\Requests\TagUpdateRequest;
-use App\Models\Category;
-use App\Models\Movie;
 use App\Models\Sitemap;
 use App\Models\Tag;
 use Illuminate\Http\JsonResponse;
@@ -137,6 +133,7 @@ class TagsService
                     'id' => $tag->id,
                     'name' => $tag->name,
                     'slug' => $tag->slug,
+                    'keyworda' => $tag->keyworda,
                 ];
             });
 
@@ -171,7 +168,8 @@ class TagsService
                 'id' => $tag->id,
                 'name' => $tag->name,
                 'slug' => $tag->slug,
-                'link' => $tag->link
+                'link' => $tag->link,
+                'keyworda' => $tag->keyworda,
             ],
             'movies' => $movies,
         ];

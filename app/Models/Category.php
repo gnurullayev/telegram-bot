@@ -22,7 +22,8 @@ class Category extends Model
         'description',
         'poster_url',
         'link',
-        'slug'
+        'slug',
+        'keywords',
     ];
 
     /**

@@ -51,6 +51,7 @@ class Movie extends Model
         'category_id',
         'is_active',
         'views',
+        'keywords',
         'slug',
     ];
 

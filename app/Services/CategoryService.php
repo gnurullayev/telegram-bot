@@ -40,6 +40,7 @@ class CategoryService
                     "name" => $category->name,
                     "poster_url" => asset('storage/' . $category->poster_url),
                     "is_active" => $category->is_active,
+                    'keywords' => $category->keywords,
                     "link" => $category->link,
                 ];
             });
@@ -172,6 +173,7 @@ class CategoryService
                 'id' => $category->id,
                 'name' => $category->name,
                 'slug' => $category->slug,
+                'keyworda' => $category->keyworda,
                 'poster_url' => asset('storage/' . $category->poster_url),
             ];
         });
@@ -213,6 +215,7 @@ class CategoryService
                 'name' => $category->name,
                 'slug' => $category->slug,
                 'link' => $category->link,
+                'keyworda' => $category->keyworda,
                 "short_description" => $category->short_content,
                 "description" => $category->description,
                 'poster_url' => asset('storage/' . $category->poster_url),

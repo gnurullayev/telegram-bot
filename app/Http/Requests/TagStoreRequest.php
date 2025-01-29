@@ -24,6 +24,7 @@ class TagStoreRequest extends FormRequest
     {
         return [
             'name' => ['string', 'max:255', 'required'],
+            'keywords' => ['string', 'required'],
             'is_active' => ['integer', 'required'],
         ];
     }

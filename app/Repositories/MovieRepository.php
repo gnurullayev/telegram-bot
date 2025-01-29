@@ -2,10 +2,8 @@
 
 namespace App\Repositories;
 
-use App\Enums\MovieTypeEnum;
 use App\Models\Category;
 use App\Models\Movie;
-use App\Models\Series;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
@@ -108,7 +106,8 @@ class MovieRepository extends BaseRepository
                         'poster_url' => asset('storage/' . $item->poster_url),
                         'views' => $item->views,
                         'slug' => $item->slug,
-                        'release_date' => $item->release_date
+                        'release_date' => $item->release_date,
+                        'keyworda' => $item->keyworda,
                     ];
                 });
         }
@@ -128,6 +127,7 @@ class MovieRepository extends BaseRepository
             'link' => $movieDetail->movieCode ? $movieDetail->movieCode->link : null,
             'country_id' => $movieDetail->country_id,
             'country_name' => $movieDetail->country_name,
+            'keyworda' => $movieDetail->keyworda,
             'other_movies' => $otherCategoryMovies,
         ];
     }
@@ -152,6 +152,7 @@ class MovieRepository extends BaseRepository
                 'poster_url' =>  asset('storage/' . $movie->poster_url),
                 'views' => $movie->views,
                 'slug' => $movie->slug,
+                'keyworda' => $movie->keyworda,
                 'category_id' => $movie->category_id,
             ];
         });

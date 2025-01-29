@@ -41,11 +41,13 @@ class MovieService
                 'description' => $item->description,
                 'rating' => $item->rating,
                 'type' => $item->type,
+
                 'views' => $item->views,
                 'poster_url' => asset('storage/' . $item->poster_url),
                 'country_id' => $item->country_id,
                 'video_url' => $item->video_url,
                 'is_active' => $item->is_active,
+                'keywords' => $item->keywords,
                 'movieCode' => $item->movieCode ? [
                     'id' => $item->movieCode['id'],
                     'link' => $item->movieCode->link,

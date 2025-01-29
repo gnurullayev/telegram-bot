@@ -18,7 +18,8 @@ class Tag extends Model
         'name',
         'is_active',
         'link',
-        'slug'
+        'slug',
+        'keywords',
     ];
 
     /**
