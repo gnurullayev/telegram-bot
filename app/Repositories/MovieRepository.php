@@ -140,7 +140,8 @@ class MovieRepository extends BaseRepository
         $movies = Movie::query()
             ->active()
             ->with(['country'])
-            ->orderBy('views', 'desc')
+            // ->orderBy('views', 'desc')
+            ->orderBy('created_at', 'desc')
             ->paginate(20);
 
         // Har bir filmni formatlash uchun map ishlatamiz
