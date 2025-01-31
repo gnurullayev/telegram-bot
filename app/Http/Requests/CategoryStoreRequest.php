@@ -27,7 +27,7 @@ class CategoryStoreRequest extends FormRequest
             'description' => ['string', 'nullable'],
             'keywords' => ['string', 'required'],
             'short_content' => ['string', 'nullable'],
-            'poster_url' => ['file', 'required', 'mimes:jpeg,png,jpg', 'max:5000'],
+            'poster_url' => ['file', 'required|image', 'max:5000'],
             'is_active' => ['integer', 'required'],
         ];
     }

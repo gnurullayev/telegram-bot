@@ -23,10 +23,6 @@ class CategoryUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
-        \Log::info('Input Data: ' . json_encode(request()->input()));
-        \Log::info('Raw Body Data: ' . request()->getContent());
-        \Log::info(json_encode(request()->all()));
-        \Log::info('Request Data: ', request()->all());
         return [
             'id' => ['numeric', 'required'],
             'name' => ['string', 'max:255', 'required'],
@@ -34,7 +30,7 @@ class CategoryUpdateRequest extends FormRequest
             'description' => ['string', 'nullable'],
             'short_content' => ['string', 'nullable'],
             'link' => ['string', 'required'],
-            'poster_url' => ['file', 'nullable', 'mimes:jpeg,png,jpg', 'max:5000'],
+            'poster_url' => ['file', 'nullable', 'image', 'max:5000'],
             'is_active' => ['integer', 'required'],
         ];
     }
