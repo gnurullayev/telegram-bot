@@ -67,9 +67,9 @@ class MovieController extends Controller
     /**
      * search movie
      */
-    public function search(Request $request): mixed
+    public function search(Request $request, string $search): mixed
     {
-        return $this->movieService->search($request);
+        return $this->movieService->search($search);
     }
 
     /**

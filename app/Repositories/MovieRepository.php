@@ -47,22 +47,19 @@ class MovieRepository extends BaseRepository
     /**
      * @param  Collection $searchQuery
      * @return LengthAwarePaginator<int, Movie>
+     * @param string $search
      */
-    public function searchMovie($searchQuery): LengthAwarePaginator
+    public function searchMovie($search): LengthAwarePaginator
     {
 
-        $movies = Movie::where(function ($query) use ($searchQuery) {
-            $query->where('title', 'LIKE', "%{$searchQuery}%")
-                ->orWhere('description', 'LIKE', "%{$searchQuery}%")
-                ->orWhere('rating', 'LIKE', "%{$searchQuery}%")
-                ->orWhereHas('country', function ($q) use ($searchQuery) {
-                    $q->where('name', 'LIKE', "%{$searchQuery}%");
-                })
-                ->orWhereHas('category', function ($q) use ($searchQuery) {
-                    $q->where('name', 'LIKE', "%{$searchQuery}%");
+        $movies = Movie::where(function ($query) use ($search) {
+            $query->where('title', 'LIKE', "%{$search}%")
+                ->orWhere('description', 'LIKE', "%{$search}%")
+                ->orWhereHas('category', function ($q) use ($search) {
+                    $q->where('name', 'LIKE', "%{$search}%");
                 });
-        })->with(['country', 'category'])
-            ->paginate(10)
+        })->with(['category'])
+            ->paginate(20)
             ->through(function ($movie) {
                 return [
                     'id' => $movie->id,
@@ -89,7 +86,7 @@ class MovieRepository extends BaseRepository
         $otherCategoryMovies = null;
 
 
-        $movieDetail = Movie::query()->where('slug',  operator: $slug)->with(['category.movies', 'country', "movieCode"])->get()->firstOrFail();
+        $movieDetail = Movie::query()->where('slug',  operator: $slug)->with(['category.movies', 'country', "movieCode", 'tags'])->get()->firstOrFail();
 
         $movieDetail->views += 1;
         $movieDetail->save();
@@ -112,6 +109,16 @@ class MovieRepository extends BaseRepository
                 });
         }
 
+        if ($movieDetail->tags) {
+            $movieDetail->tags_data = $movieDetail->tags->map(function ($tag) {
+                return [
+                    'name' => $tag->name,
+                    'slug' => $tag->slug,
+                    'id' => $tag->id,
+                ];
+            });
+        }
+
         return [
             'id' => $movieDetail->id,
             'title' => $movieDetail->title,
@@ -129,6 +136,7 @@ class MovieRepository extends BaseRepository
             'country_name' => $movieDetail->country_name,
             'keyworda' => $movieDetail->keyworda,
             'other_movies' => $otherCategoryMovies,
+            'tags_data' => $movieDetail->tags_data
         ];
     }
 

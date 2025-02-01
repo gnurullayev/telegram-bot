@@ -187,11 +187,9 @@ class MovieService
         }
     }
 
-    public function search(Request $request)
+    public function search(string $search)
     {
-        $searchQuery = $request->input('query');
-
-        $movies = $this->movieRepository->searchMovie($searchQuery);
+        $movies = $this->movieRepository->searchMovie($search);
         return  Response::customJson($movies, 200);
     }
 
