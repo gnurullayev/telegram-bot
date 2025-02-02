@@ -39,16 +39,15 @@ class Handler extends WebhookHandler
 
     public function checkMovie(): void
     {
-        $text = $this->message->text(); // Foydalanuvchi kiritgan kino kodi
-        $this->reply("⚠️ Foydalanuvchi kiritgan kino kodi");
+        $text = $this->message->text ?? ''; // Agar bo'sh bo'lsa, default qiymat ''
+
+        if (empty($text)) {
+            $this->reply("⚠️ Iltimos, kino kodini yuboring.");
+            return;
+        }
 
         if (preg_match('/^\d+$/', $text)) {
-
-            if ($text) {
-                $this->reply("🎬 Kino topildi! Link: {$text}");
-            } else {
-                $this->reply("❌ Afsuski, siz soʻragan kino topilmadi.");
-            }
+            $this->reply("🎬 Kino topildi! Link: {$text}");
         } else {
             $this->reply("⚠️ Iltimos, faqat kino kodini yuboring (masalan: 12345).");
         }
