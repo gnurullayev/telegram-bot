@@ -46,7 +46,7 @@ class Handler extends WebhookHandler
         try {
 
             // Yana bir xabar bilan tasdiqlashsadf
-            $this->reply(" " . $chat);
+            $this->reply(" " . $chat_id);
         } catch (\Exception $e) {
             // Xatolikni qaytarish
             $this->reply('Xato yuz berdi: ' . $e->getMessage());
