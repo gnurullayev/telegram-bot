@@ -52,4 +52,10 @@ class Handler extends WebhookHandler
             $this->reply("⚠️ Iltimos, faqat kino kodini yuboring (masalan: 12345).");
         }
     }
+
+
+    public function test(): void
+    {
+        $this->reply("⚠️ test");
+    }
 }
