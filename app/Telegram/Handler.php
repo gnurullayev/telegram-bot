@@ -54,8 +54,8 @@ class Handler extends WebhookHandler
     }
 
 
-    public function test(): void
+    public function test(string $text): void
     {
-        $this->reply("⚠️ test");
+        $this->reply("⚠️ test" . " " . $text);
     }
 }
