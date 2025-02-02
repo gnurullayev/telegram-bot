@@ -25,7 +25,7 @@ class Handler extends WebhookHandler
         // $chat_id = $updates[0]->getMessage()->getChat()->getId;
         // Video yuborish
         $user = $this->data['message']['from'] ?? null;
-
+        $this->reply(json_encode($user));
         if ($user) {
             $user_id = $user['id'] ?? 'Noma’lum';
             $first_name = $user['first_name'] ?? 'Noma’lum';
