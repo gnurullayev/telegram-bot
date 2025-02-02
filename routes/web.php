@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\TelegramController;
+use App\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Support\Facades\Route;
 
 
@@ -15,4 +16,4 @@ Route::get('/', function () {
 //     return 'OK';
 // });
 
-Route::post('/telegram/webhook', [TelegramController::class, 'handleWebhook']);
+Route::post('/telegram/webhook', [TelegramController::class, 'handleWebhook'])->middleware(VerifyCsrfToken::class);
