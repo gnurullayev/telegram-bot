@@ -42,13 +42,9 @@ class Handler extends WebhookHandler
         $video_url = "https://topmovie.sgp1.cdn.digitaloceanspaces.com/Qizil-g'unchalar/G'unchalar%2010-qism%20480p%20O'zbek%20tilida.mp4";
 
         try {
-            // Video yuborish
-            FacadesTelegraph::chat($chat_id)
-                ->video($video_url)
-                ->send();
 
             // Yana bir xabar bilan tasdiqlash
-            $this->reply("Video yuborildi. Ko'proq ma'lumot uchun <a href='https://topmovie.me'>Topmovie.me</a> saytiga tashrif buyuring!");
+            $this->reply($chat_id . " " . $video_url);
         } catch (\Exception $e) {
             // Xatolikni qaytarish
             $this->reply('Xato yuz berdi: ' . $e->getMessage());
