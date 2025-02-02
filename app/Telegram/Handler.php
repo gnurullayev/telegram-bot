@@ -3,7 +3,9 @@
 namespace App\Telegram;
 
 use App\Models\BotUser;
+use App\Models\MovieCode;
 use DefStudio\Telegraph\Handlers\WebhookHandler;
+use Illuminate\Support\Stringable;
 
 class Handler extends WebhookHandler
 {
@@ -57,5 +59,22 @@ class Handler extends WebhookHandler
     public function test(string $text): void
     {
         $this->reply("⚠️ test" . " " . $text);
+    }
+
+    public function handleChatMessage(Stringable $text): void
+    {
+        $movieCode = (string) $text;
+
+        if (ctype_digit($movieCode)) {
+            $movie = MovieCode::where('id', $movieCode)->first();
+
+            if ($movie) {
+                $this->reply("🎬 Kino topildi! Link: {$movie->link}");
+            } else {
+                $this->reply("⚠️ Afsuski, siz so'ragan kino topilmadi.");
+            }
+        } else {
+            $this->reply("⚠️ Iltimos, faqat raqam kiriting (masalan: 12345).");
+        }
     }
 }
