@@ -40,23 +40,6 @@ class Handler extends WebhookHandler
         }
     }
 
-    public function checkMovie(): void
-    {
-        $text = $this->message->text ?? ''; // Agar bo'sh bo'lsa, default qiymat ''
-
-        if (empty($text)) {
-            $this->reply("⚠️ Iltimos, kino kodini yuboring.");
-            return;
-        }
-
-        if (preg_match('/^\d+$/', $text)) {
-            $this->reply("🎬 Kino topildi! Link: {$text}");
-        } else {
-            $this->reply("⚠️ Iltimos, faqat kino kodini yuboring (masalan: 12345).");
-        }
-    }
-
-
     public function set_menu(): void
     {
         $this->setCommands();
@@ -86,9 +69,9 @@ class Handler extends WebhookHandler
 
         $commands = [
             ['command' => 'start', 'description' => "Botni ishga tushirish"],
-            ['command' => 'movies', 'description' => "Mashhur kinolar"],
-            ['command' => 'search', 'description' => "Kino qidirish"],
-            ['command' => 'help', 'description' => "Yordam"],
+            // ['command' => 'movies', 'description' => "Mashhur kinolar"],
+            // ['command' => 'search', 'description' => "Kino qidirish"],
+            // ['command' => 'help', 'description' => "Yordam"],
         ];
 
         $response = Http::post($url, ['commands' => json_encode($commands)]);
