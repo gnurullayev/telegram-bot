@@ -5,6 +5,7 @@ namespace App\Telegram;
 use App\Models\BotUser;
 use App\Models\MovieCode;
 use DefStudio\Telegraph\Handlers\WebhookHandler;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Stringable;
 
 class Handler extends WebhookHandler
@@ -56,9 +57,9 @@ class Handler extends WebhookHandler
     }
 
 
-    public function test(string $text): void
+    public function set_menu(): void
     {
-        $this->reply("⚠️ test" . " " . $text);
+        $this->setCommands();
     }
 
     public function handleChatMessage(Stringable $text): void
@@ -75,6 +76,27 @@ class Handler extends WebhookHandler
             }
         } else {
             $this->reply("⚠️ Iltimos, faqat raqam kiriting (masalan: 12345).");
+        }
+    }
+
+    public function setCommands(): void
+    {
+        $token = config('services.telegram.bot_token'); // Tokenni .env fayldan olish
+        $url = "https://api.telegram.org/bot{$token}/setMyCommands";
+
+        $commands = [
+            ['command' => 'start', 'description' => "Botni ishga tushirish"],
+            ['command' => 'movies', 'description' => "Mashhur kinolar"],
+            ['command' => 'search', 'description' => "Kino qidirish"],
+            ['command' => 'help', 'description' => "Yordam"],
+        ];
+
+        $response = Http::post($url, ['commands' => json_encode($commands)]);
+
+        if ($response->successful()) {
+            $this->reply('✅ Telegram buyruqlari muvaffaqiyatli o‘rnatildi!');
+        } else {
+            $this->reply('❌ Xatolik yuz berdi: ' . $response->body());
         }
     }
 }
