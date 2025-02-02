@@ -40,6 +40,7 @@ class Handler extends WebhookHandler
     public function checkMovie(): void
     {
         $text = $this->message->text(); // Foydalanuvchi kiritgan kino kodi
+        $this->reply("⚠️ Foydalanuvchi kiritgan kino kodi");
 
         if (preg_match('/^\d+$/', $text)) {
 
