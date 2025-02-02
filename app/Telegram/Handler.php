@@ -17,13 +17,25 @@ class Handler extends WebhookHandler
     {
         // $this->bo("salom botga hush kelibsiz");
 
-        $this->reply(json_encode($this->data));
-        $this->reply(json_encode($this->message->id()));
+        // $this->reply(json_encode($this->data));
+        // $this->reply(json_encode($this->message->id()));
         // $chat_id = $this->message->id();
         // $telegraph = new Telegraph();
         // $updates = $telegraph->getUpdates();
         // $chat_id = $updates[0]->getMessage()->getChat()->getId;
         // Video yuborish
+        $user = $this->data['message']['from'] ?? null;
+
+        if ($user) {
+            $user_id = $user['id'] ?? 'Noma’lum';
+            $first_name = $user['first_name'] ?? 'Noma’lum';
+            $last_name = $user['last_name'] ?? 'Noma’lum';
+            $username = $user['username'] ?? 'Noma’lum';
+
+            $this->reply("👤 Foydalanuvchi ma'lumotlari:\n\n🆔 ID: $user_id\n👤 Ism: $first_name\n🔠 Familiya: $last_name\n📛 Username: @$username");
+        } else {
+            $this->reply("❌ Foydalanuvchi ma'lumotlarini olishda xatolik yuz berdi.");
+        }
         try {
             $this->reply("Ko'proq ma'lumot uchun https://topmovie.sgp1.cdn.digitaloceanspaces.com/Qizil-g'unchalar/G'unchalar%2010-qism%20480p%20O'zbek%20tilida.mp4 saytiga tashrif buyuring!");
 
