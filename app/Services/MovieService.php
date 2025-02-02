@@ -139,10 +139,17 @@ class MovieService
             }
 
             $movieCode = MovieCode::where('movie_id', $movie->id)->first();
-            $movieCode = MovieCode::firstOrCreate(
-                ['movie_id' => $movie->id], // Qidirish shartlari
-                ['link' => $validated['link']] // Yangi yozuv yaratishda qo'llaniladigan ma'lumotlar
-            );
+
+            if ($movieCode) {
+                $movieCode->update([
+                    'link' => $validated['link'],
+                ]);
+            } else {
+                $movieCode = MovieCode::create([
+                    'link' => $validated['link']
+                ]);
+            }
+
 
             $sitemap = Sitemap::where('url', $movieCode->link)->first();
             if ($sitemap) {
