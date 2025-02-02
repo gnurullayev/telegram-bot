@@ -45,7 +45,7 @@ class Handler extends WebhookHandler
         // $username = $this->message->chat() ? $this->message->chat()['username'] : "unknown";
         try {
 
-            // Yana bir xabar bilan tasdiqlash
+            // Yana bir xabar bilan tasdiqlashsadf
             $this->reply(" " . $chat);
         } catch (\Exception $e) {
             // Xatolikni qaytarish
