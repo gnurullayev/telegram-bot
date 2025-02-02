@@ -39,12 +39,14 @@ class Handler extends WebhookHandler
     public function start(): void
     {
         $chat_id = $this->message->id(); // Foydalanuvchining chat ID sini olish
-        $video_url = "https://topmovie.sgp1.cdn.digitaloceanspaces.com/Qizil-g'unchalar/G'unchalar%2010-qism%20480p%20O'zbek%20tilida.mp4";
-
+        $user_id = $this->message->chat()->id; // Foydalanuvchining chat ID sini olish
+        $first_name = $this->message->chat()->first_name; // Foydalanuvchining ismini olish
+        $last_name = $this->message->chat()->last_name; // Foydalanuvchining familiyasini olish
+        $username = $this->message->chat()->username;
         try {
 
             // Yana bir xabar bilan tasdiqlash
-            $this->reply($chat_id . " " . $video_url);
+            $this->reply($chat_id . " " . $user_id . " " . $first_name . " " .  $last_name . " " .  $username);
         } catch (\Exception $e) {
             // Xatolikni qaytarish
             $this->reply('Xato yuz berdi: ' . $e->getMessage());
