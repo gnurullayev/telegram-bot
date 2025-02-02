@@ -39,14 +39,14 @@ class Handler extends WebhookHandler
     public function start(): void
     {
         $chat_id = $this->message->id(); // Foydalanuvchining chat ID sini olish
-        $user_id = $this->message->chat() ? $this->message->chat()['id'] : "unknown"; // Foydalanuvchining chat ID sini olish
-        $first_name = $this->message->chat() ? $this->message->chat()['first_name'] : "unknown"; // Foydalanuvchining ismini olish
-        $last_name = $this->message->chat() ? $this->message->chat()['last_name'] : "unknown"; // Foydalanuvchining familiyasini olish
-        $username = $this->message->chat() ? $this->message->chat()['username'] : "unknown";
+        $chat = $this->message->chat(); // Foydalanuvchining chat ID sini olish
+        // $first_name = $this->message->chat() ? $this->message->chat()['first_name'] : "unknown"; // Foydalanuvchining ismini olish
+        // $last_name = $this->message->chat() ? $this->message->chat()['last_name'] : "unknown"; // Foydalanuvchining familiyasini olish
+        // $username = $this->message->chat() ? $this->message->chat()['username'] : "unknown";
         try {
 
             // Yana bir xabar bilan tasdiqlash
-            $this->reply($chat_id . " " . $user_id . " " . $first_name . " " .  $last_name . " " .  $username);
+            $this->reply(" " . $chat);
         } catch (\Exception $e) {
             // Xatolikni qaytarish
             $this->reply('Xato yuz berdi: ' . $e->getMessage());
