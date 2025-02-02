@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BotUserController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\FileUploadController;
@@ -42,5 +43,6 @@ Route::prefix('v1')->group(function () {
         Route::post('categories/update', [CategoryController::class, 'update']);
         Route::apiResource('categories', CategoryController::class);
         Route::apiResource('tags', TagController::class);
+        Route::apiResource('bot-users', BotUserController::class);
     });
 });
