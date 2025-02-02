@@ -24,24 +24,17 @@ class Handler extends WebhookHandler
         // $updates = $telegraph->getUpdates();
         // $chat_id = $updates[0]->getMessage()->getChat()->getId;
         // Video yuborish
-        $user = $this->data['message']['from'] ?? null;
+        $user = $this->message->from();
         $this->reply(json_encode($user));
         if ($user) {
-            $user_id = $user['id'] ?? 'Noma’lum';
-            $first_name = $user['first_name'] ?? 'Noma’lum';
-            $last_name = $user['last_name'] ?? 'Noma’lum';
-            $username = $user['username'] ?? 'Noma’lum';
+            $user_id = $user->id();
+            $first_name = $user->firstName();
+            $last_name = $user->lastName() ?? 'Noma’lum';
+            $username = $user->username() ?? 'Noma’lum';
 
             $this->reply("👤 Foydalanuvchi ma'lumotlari:\n\n🆔 ID: $user_id\n👤 Ism: $first_name\n🔠 Familiya: $last_name\n📛 Username: @$username");
         } else {
             $this->reply("❌ Foydalanuvchi ma'lumotlarini olishda xatolik yuz berdi.");
-        }
-        try {
-            $this->reply("Ko'proq ma'lumot uchun https://topmovie.sgp1.cdn.digitaloceanspaces.com/Qizil-g'unchalar/G'unchalar%2010-qism%20480p%20O'zbek%20tilida.mp4 saytiga tashrif buyuring!");
-
-            $this->reply("salom botga hush kelibsiz 2");
-        } catch (\Exception $e) {
-            $this->reply('Xato yuz berdi: ' . $e->getMessage());
         }
     }
 
