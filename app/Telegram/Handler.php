@@ -60,10 +60,9 @@ class Handler extends WebhookHandler
             $message .= "---------------------\n";
         }
 
-        $message .= "Total: $total";
-        $message .= "---------------------\n";
 
         $this->reply($message);
+        $this->reply("Total: " . $total);
     }
 
 
