@@ -42,6 +42,8 @@ class Handler extends WebhookHandler
 
     public function bot_users(): void
     {
+
+        $this->reply("salom");
         $users = BotUser::query()->paginate(10); // Har sahifada 10 ta foydalanuvchi
 
         if ($users->isEmpty()) {
