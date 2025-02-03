@@ -33,7 +33,7 @@ class MovieRepository extends BaseRepository
      */
     public function allMovies($params)
     {
-        $query = Movie::query();
+        $query = Movie::query()->with('movieCode');
 
         if ($params->get('s')) {
             $query->where('title', 'LIKE', "%{$params->get('s')}%");

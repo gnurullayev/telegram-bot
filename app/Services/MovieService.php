@@ -10,7 +10,6 @@ use App\Models\MovieCode;
 use App\Models\Sitemap;
 use App\Repositories\MovieRepository;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
@@ -146,10 +145,10 @@ class MovieService
                 ]);
             } else {
                 $movieCode = MovieCode::create([
-                    'link' => $validated['link']
+                    'link' => $validated['link'],
+                    'movie_id' => $movie->id
                 ]);
             }
-
 
             $sitemap = Sitemap::where('url', $movieCode->link)->first();
             if ($sitemap) {
