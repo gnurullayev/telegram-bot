@@ -42,7 +42,9 @@ class Handler extends WebhookHandler
 
     public function bot_users(): void
     {
-        $users = BotUser::query()->orderBy('created_at', 'desc')->paginate(10); // Har sahifada 10 ta foydalanuvchi
+        $query = BotUser::query()->orderBy('created_at', 'desc');
+        $total = $query->count(); // Har sahifada 10 ta foydalanuvchi
+        $users = $query->paginate(50); // Har sahifada 10 ta foydalanuvchi
 
         if ($users->isEmpty()) {
             $this->reply("📌 Hozircha ro'yxatda foydalanuvchilar yo'q.");
@@ -54,11 +56,14 @@ class Handler extends WebhookHandler
             $username = "" . $user->username;
             $message .= "🆔 ID: {$user->telegram_id}\n";
             $message .= "👤 Ism: {$user->first_name}\n";
-            $message .= "📛 Username: @" . "alish" . "\n";
+            // $message .= "📛 Username: @" . "alish" . "\n";
             $message .= "---------------------\n";
         }
 
-        $this->reply($username);
+        $message .= "Total: $total";
+        $message .= "---------------------\n";
+
+        $this->reply($message);
     }
 
 
