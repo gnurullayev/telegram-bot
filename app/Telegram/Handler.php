@@ -42,28 +42,36 @@ class Handler extends WebhookHandler
 
     public function bot_users(): void
     {
-
-        $users = BotUser::query()->paginate(10); // Har sahifada 10 ta foydalanuvchi
+        $users = BotUser::query()->paginate(10);
 
         if ($users->isEmpty()) {
             $this->reply("📌 Hozircha ro'yxatda foydalanuvchilar yo'q.");
             return;
         }
 
-        $message = "📌 *Bot foydalanuvchilari:*\n\n";
-        $this->reply($message);
+        $messageParts = [];
+        $currentMessage = "📌 *Bot foydalanuvchilari:*\n\n";
+
         foreach ($users as $user) {
-            $message .= "🆔 ID: {$user->telegram_id}\n";
-            $message .= "👤 Ism: {$user->first_name} {$user->last_name}\n";
-            $message .= "📛 Username: @" . ($user->username ?? "Noma'lum") . "\n";
-            $message .= "---------------------\n";
+            $userInfo = "🆔 ID: {$user->telegram_id}\n";
+            $userInfo .= "👤 Ism: {$user->first_name} {$user->last_name}\n";
+            $userInfo .= "📛 Username: @" . ($user->username ?? "Noma'lum") . "\n";
+            $userInfo .= "---------------------\n";
+
+            if (mb_strlen($currentMessage . $userInfo) > 4000) { // 4000 belgidan oshmasligi uchun
+                $messageParts[] = $currentMessage;
+                $currentMessage = "";
+            }
+
+            $currentMessage .= $userInfo;
         }
 
-        $this->reply("fsadfdas");
+        $messageParts[] = $currentMessage; // Oxirgi bo‘lakni qo‘shish
 
-        $this->reply($message);
+        foreach ($messageParts as $part) {
+            $this->reply($part);
+        }
     }
-
 
     public function set_menu(): void
     {
