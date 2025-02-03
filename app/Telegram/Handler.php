@@ -50,15 +50,14 @@ class Handler extends WebhookHandler
         }
 
         $message = "📌 *Bot foydalanuvchilari:*\n\n";
-        $this->reply($message);
         foreach ($users as $user) {
             $message .= "🆔 ID: {$user->telegram_id}\n";
             $message .= "👤 Ism: {$user->first_name}\n";
-            $message .= "📛 Username: @" . ($user['username'] ?? "Noma'lum") . "\n";
+            // $message .= "📛 Username: @" . ($user['username'] ?? "Noma'lum") . "\n";
             $message .= "---------------------\n";
         }
 
-        $this->reply(json_encode($users));
+        $this->reply(json_encode($message));
     }
 
 
