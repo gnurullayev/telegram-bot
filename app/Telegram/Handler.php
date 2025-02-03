@@ -53,8 +53,8 @@ class Handler extends WebhookHandler
         $this->reply($message);
         foreach ($users as $user) {
             $message .= "🆔 ID: {$user->telegram_id}\n";
-            $message .= "👤 Ism: {$user->first_name} {$user->last_name}\n";
-            $message .= "📛 Username: @" . ($user->username ?? "Noma'lum") . "\n";
+            $message .= "👤 Ism: {$user->first_name}\n";
+            $message .= "📛 Username: @" . ($user['username'] ?? "Noma'lum") . "\n";
             $message .= "---------------------\n";
         }
 
