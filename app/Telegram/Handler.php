@@ -59,6 +59,8 @@ class Handler extends WebhookHandler
             $message .= "---------------------\n";
         }
 
+        $this->reply("fsadfdas");
+
         $this->reply($message);
     }
 
