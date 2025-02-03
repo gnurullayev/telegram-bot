@@ -40,52 +40,27 @@ class Handler extends WebhookHandler
         }
     }
 
-    public function bot_users(int $page = 1): void
+    public function bot_users(): void
     {
-        $perPage = 5;
-        $users = BotUser::query()->paginate($perPage, ['*'], 'page', $page);
+        $users = BotUser::query()->paginate(10); // Har sahifada 10 ta foydalanuvchi
 
         if ($users->isEmpty()) {
             $this->reply("📌 Hozircha ro'yxatda foydalanuvchilar yo'q.");
             return;
         }
 
-        $message = "📌 *Bot foydalanuvchilari (Sahifa: $page):*\n\n";
+        $message = "📌 *Bot foydalanuvchilari:*\n\n";
+        $this->reply($message);
+        foreach ($users as $user) {
+            $message .= "🆔 ID: {$user->telegram_id}\n";
+            $message .= "👤 Ism: {$user->first_name} {$user->last_name}\n";
+            $message .= "📛 Username: @" . ($user->username ?? "Noma'lum") . "\n";
+            $message .= "---------------------\n";
+        }
 
         $this->reply($message);
-        // foreach ($users as $user) {
-        //     $message .= "🆔 ID: {$user->telegram_id}\n";
-        //     $message .= "👤 Ism: {$user->first_name}\n";
-        //     $message .= "📛 Username: @" . ($user['username'] ?? "Noma'lum") . "\n";
-        //     $message .= "---------------------\n";
-        // }
-
-        // Inline tugmalarni yaratish
-        // $keyboard = Keyboard::make();
-        // if ($users->previousPageUrl()) {
-        //     $keyboard->row([
-        //         Button::make('⬅ Oldingi')->action('bot_users')->param('page', $page - 1),
-        //     ]);
-        // }
-        // if ($users->nextPageUrl()) {
-        //     $keyboard->row([
-        //         Button::make('Keyingi ➡')->action('bot_users')->param('page', $page + 1),
-        //     ]);
-        // }
-
-        // Xabarni tugmalar bilan jo‘natish
-        // $this->reply($message);
     }
 
-    public function handleCallbackQuery(): void
-    {
-        $callbackData = $this->callbackQuery->data();
-
-        if (str_starts_with($callbackData, "bot_users:")) {
-            $page = (int) str_replace("bot_users:", "", $callbackData);
-            $this->bot_users($page);
-        }
-    }
 
     public function set_menu(): void
     {
