@@ -57,7 +57,7 @@ class Handler extends WebhookHandler
             $message .= "---------------------\n";
         }
 
-        $this->reply(json_encode($message));
+        $this->reply($message);
     }
 
 
