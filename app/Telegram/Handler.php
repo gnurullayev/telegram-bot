@@ -58,7 +58,7 @@ class Handler extends WebhookHandler
             $message .= "---------------------\n";
         }
 
-        $this->reply($message);
+        $this->reply(json_encode($users));
     }
 
 
@@ -75,7 +75,7 @@ class Handler extends WebhookHandler
             $movie = MovieCode::where('id', $movieCode)->first();
 
             if ($movie) {
-                $this->reply("🎬 Kino topildi! Link: {$movie->link}");
+                $this->reply("🎬 Link: {$movie->link}");
             } else {
                 $this->reply("⚠️ Afsuski, siz so'ragan kino topilmadi.");
             }
