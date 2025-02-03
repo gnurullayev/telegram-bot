@@ -43,7 +43,6 @@ class Handler extends WebhookHandler
     public function bot_users(): void
     {
 
-        $this->reply("salom");
         $users = BotUser::query()->paginate(10); // Har sahifada 10 ta foydalanuvchi
 
         if ($users->isEmpty()) {
@@ -52,6 +51,7 @@ class Handler extends WebhookHandler
         }
 
         $message = "📌 *Bot foydalanuvchilari:*\n\n";
+        $this->reply($message);
         foreach ($users as $user) {
             $message .= "🆔 ID: {$user->telegram_id}\n";
             $message .= "👤 Ism: {$user->first_name} {$user->last_name}\n";
