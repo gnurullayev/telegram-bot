@@ -44,7 +44,7 @@ class Handler extends WebhookHandler
     {
         $query = BotUser::query()->orderBy('created_at', 'desc');
         $total = $query->count(); // Har sahifada 10 ta foydalanuvchi
-        $users = $query->paginate(30); // Har sahifada 10 ta foydalanuvchi
+        $users = $query->paginate(50); // Har sahifada 10 ta foydalanuvchi
 
         if ($users->isEmpty()) {
             $this->reply("📌 Hozircha ro'yxatda foydalanuvchilar yo'q.");
