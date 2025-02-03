@@ -51,12 +51,14 @@ class Handler extends WebhookHandler
         }
 
         $message = "📌 *Bot foydalanuvchilari (Sahifa: $page):*\n\n";
-        foreach ($users as $user) {
-            $message .= "🆔 ID: {$user->telegram_id}\n";
-            $message .= "👤 Ism: {$user->first_name}\n";
-            $message .= "📛 Username: @" . ($user['username'] ?? "Noma'lum") . "\n";
-            $message .= "---------------------\n";
-        }
+
+        $this->reply($message);
+        // foreach ($users as $user) {
+        //     $message .= "🆔 ID: {$user->telegram_id}\n";
+        //     $message .= "👤 Ism: {$user->first_name}\n";
+        //     $message .= "📛 Username: @" . ($user['username'] ?? "Noma'lum") . "\n";
+        //     $message .= "---------------------\n";
+        // }
 
         // Inline tugmalarni yaratish
         // $keyboard = Keyboard::make();
@@ -72,7 +74,7 @@ class Handler extends WebhookHandler
         // }
 
         // Xabarni tugmalar bilan jo‘natish
-        $this->reply($message);
+        // $this->reply($message);
     }
 
     public function handleCallbackQuery(): void
