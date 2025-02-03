@@ -5,6 +5,8 @@ namespace App\Telegram;
 use App\Models\BotUser;
 use App\Models\MovieCode;
 use DefStudio\Telegraph\Handlers\WebhookHandler;
+use DefStudio\Telegraph\Keyboard\Button;
+use DefStudio\Telegraph\Keyboard\Keyboard;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Stringable;
 
@@ -40,38 +42,86 @@ class Handler extends WebhookHandler
         }
     }
 
-    public function bot_users(): void
+    public function bot_users(int $page = 1): void
     {
-        $users = BotUser::query()->paginate(10);
+        $perPage = 5;
+        $users = BotUser::query()->paginate($perPage, ['*'], 'page', $page);
 
         if ($users->isEmpty()) {
             $this->reply("📌 Hozircha ro'yxatda foydalanuvchilar yo'q.");
             return;
         }
 
-        $messageParts = [];
-        $currentMessage = "📌 *Bot foydalanuvchilari:*\n\n";
-
+        $message = "📌 *Bot foydalanuvchilari (Sahifa: $page):*\n\n";
         foreach ($users as $user) {
-            $userInfo = "🆔 ID: {$user->telegram_id}\n";
-            $userInfo .= "👤 Ism: {$user->first_name} {$user->last_name}\n";
-            $userInfo .= "📛 Username: @" . ($user->username ?? "Noma'lum") . "\n";
-            $userInfo .= "---------------------\n";
-
-            if (mb_strlen($currentMessage . $userInfo) > 4000) { // 4000 belgidan oshmasligi uchun
-                $messageParts[] = $currentMessage;
-                $currentMessage = "";
-            }
-
-            $currentMessage .= $userInfo;
+            $message .= "🆔 ID: {$user->telegram_id}\n";
+            $message .= "👤 Ism: {$user->first_name} {$user->last_name}\n";
+            $message .= "📛 Username: @" . ($user->username ?? "Noma'lum") . "\n";
+            $message .= "---------------------\n";
         }
 
-        $messageParts[] = $currentMessage; // Oxirgi bo‘lakni qo‘shish
+        // Inline tugmalarni yaratish
+        $keyboard = Keyboard::make();
+        if ($users->previousPageUrl()) {
+            $keyboard->row([
+                Button::make('⬅ Oldingi')->action('bot_users')->param('page', $page - 1),
+            ]);
+        }
+        if ($users->nextPageUrl()) {
+            $keyboard->row([
+                Button::make('Keyingi ➡')->action('bot_users')->param('page', $page + 1),
+            ]);
+        }
 
-        foreach ($messageParts as $part) {
-            $this->reply($part);
+        // Xabarni tugmalar bilan jo‘natish
+        $this->reply($message);
+        $this->replaceKeyboard($keyboard);
+    }
+
+
+    // public function bot_users(int $page = 1): void
+    // {
+    //     $perPage = 5; // Har sahifada 5 ta foydalanuvchi
+    //     $users = BotUser::query()->paginate($perPage, ['*'], 'page', $page);
+
+    //     if ($users->isEmpty()) {
+    //         $this->reply("📌 Hozircha ro'yxatda foydalanuvchilar yo'q.");
+    //         return;
+    //     }
+
+    //     $message = "📌 *Bot foydalanuvchilari (Sahifa: $page):*\n\n";
+    //     foreach ($users as $user) {
+    //         $message .= "🆔 ID: {$user->telegram_id}\n";
+    //         $message .= "👤 Ism: {$user->first_name} {$user->last_name}\n";
+    //         $message .= "📛 Username: @" . ($user->username ?? "Noma'lum") . "\n";
+    //         $message .= "---------------------\n";
+    //     }
+
+    //     // Inline tugmalar bilan sahifalararo o'tish
+    //     $buttons = [];
+    //     if ($users->previousPageUrl()) {
+    //         $buttons[] = ['text' => '⬅ Oldingi', 'callback_data' => "bot_users:" . ($page - 1)];
+    //     }
+    //     if ($users->nextPageUrl()) {
+    //         $buttons[] = ['text' => 'Keyingi ➡', 'callback_data' => "bot_users:" . ($page + 1)];
+    //     }
+
+    //     $this->reply($message, reply_markup: json_encode([
+    //         'inline_keyboard' => [$buttons]
+    //     ]));
+    // }
+
+    public function handleCallbackQuery(): void
+    {
+        $callbackData = $this->callbackQuery->data();
+
+        if (str_starts_with($callbackData, "bot_users:")) {
+            $page = (int) str_replace("bot_users:", "", $callbackData);
+            $this->bot_users($page);
         }
     }
+
+
 
     public function set_menu(): void
     {
