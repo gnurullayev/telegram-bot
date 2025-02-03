@@ -51,9 +51,10 @@ class Handler extends WebhookHandler
 
         $message = "📌 *Bot foydalanuvchilari:*\n\n";
         foreach ($users as $user) {
+            $username = $user->username ? $user->username : "Noma'lum";
             $message .= "🆔 ID: {$user->telegram_id}\n";
             $message .= "👤 Ism: {$user->first_name}\n";
-            $message .= "📛 Username: @" . ($user->username ? $user->username : "Noma'lum") . "\n";
+            $message .= "📛 Username: @" . $username . "\n";
             $message .= "---------------------\n";
         }
 
