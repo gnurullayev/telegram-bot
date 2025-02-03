@@ -60,7 +60,7 @@ class Handler extends WebhookHandler
 
 
         $this->reply($message);
-        // $this->reply("Total: " . $total);
+        $this->reply("Total: " . $total);
     }
 
 
