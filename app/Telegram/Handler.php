@@ -34,7 +34,7 @@ class Handler extends WebhookHandler
                     'username' => $username,
                 ]
             );
-            $this->reply("❌Iltimos, faqat kino kodini yuboring (masalan: 12345).");
+            $this->reply("❌Iltimos, faqat kino kodini yuboring (masalan: 12345). \n Please send only the movie code (for example: 12345).");
         } else {
             \Log::info("❌ Foydalanuvchi ma'lumotlarini olishda xatolik yuz berdi.");
         }
