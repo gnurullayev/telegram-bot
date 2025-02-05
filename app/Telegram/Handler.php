@@ -36,7 +36,7 @@ class Handler extends WebhookHandler
             );
             $this->reply("❌Iltimos, faqat kino kodini yuboring (masalan: 12345).");
         } else {
-            $this->reply("❌ Foydalanuvchi ma'lumotlarini olishda xatolik yuz berdi.");
+            \Log::info("❌ Foydalanuvchi ma'lumotlarini olishda xatolik yuz berdi.");
         }
     }
 
@@ -44,7 +44,7 @@ class Handler extends WebhookHandler
     {
         $query = BotUser::query()->orderBy('created_at', 'desc');
         $total = $query->count(); // Har sahifada 10 ta foydalanuvchi
-        $users = $query->paginate(30); // Har sahifada 10 ta foydalanuvchi
+        $users = $query->paginate(20); // Har sahifada 10 ta foydalanuvchi
 
         if ($users->isEmpty()) {
             $this->reply("📌 Hozircha ro'yxatda foydalanuvchilar yo'q.");
@@ -79,10 +79,10 @@ class Handler extends WebhookHandler
             if ($movie) {
                 $this->reply("🎬 Link: {$movie->link}");
             } else {
-                $this->reply("⚠️ Afsuski, siz so'ragan kino topilmadi.");
+                $this->reply("⚠️ Afsuski, siz so'ragan kino topilmadi. \n Unfortunately, the movie you requested was not found.");
             }
         } else {
-            $this->reply("⚠️ Iltimos, faqat raqam kiriting (masalan: 12345).");
+            $this->reply("⚠️ Iltimos, faqat raqam kiriting (masalan: 12345).\n ⚠️ Please enter only numbers (for example: 12345).");
         }
     }
 
