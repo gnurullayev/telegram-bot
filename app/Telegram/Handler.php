@@ -14,7 +14,7 @@ class Handler extends WebhookHandler
     private $channel_username = "romantic_movies1";
 
 
-    private $channel_link = "https://t.me/{$channel_username}";
+    private $channel_link = "https://t.me/{$this->channel_username}";
     public function hello(): void
     {
         $this->reply("salom botga hush kelibsiz");
