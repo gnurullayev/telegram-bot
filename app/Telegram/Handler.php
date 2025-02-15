@@ -27,7 +27,7 @@ class Handler extends WebhookHandler
             $this->reply("📢 Assalomu alaykum! Bizning kanalga azo bo‘lishingizni tavsiya qilamiz.");
             sleep(1);
             // $this->reply("📢 Iltimos, bizning kanalimizga azo bo‘ling: <a href='https://t.me/{$channel_username}'>Kanalga o'tish</a>",);
-            $this->reply("👉 https://t.me/{$channel_username}");
+            $$this->reply("📢 Iltimos, bizning kanalimizga azo bo‘ling: [romantic_movies1](https://t.me/romantic_movies1)", true);
             // if (!$this->isUserMember($user_id)) {
             //     return;
             // }
