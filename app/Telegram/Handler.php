@@ -28,17 +28,15 @@ class Handler extends WebhookHandler
             $channel_link = "https://t.me/{$channel_username}";
             $this->reply("📢 Bizning kanalga azo bo‘lishingizni tavsiya qilamiz.");
 
-
-            $response = Http::post("https://api.telegram.org/bot{$token}/sendMessage", [
-                'chat_id' => $user_id, // yoki kanal chat_id
-                'text' => "📢 Iltimos, bizning kanalimizga azo bo‘ling: <a href='{$channel_link}'>Movies</a>",
-                'parse_mode' => 'HTML'
-            ]);
-
-            \Log::info($response->body());
-            // if (!$this->isUserMember($user_id)) {
-            //     return;
-            // }
+            if (!$this->isUserMember($user_id)) {
+                $response = Http::post("https://api.telegram.org/bot{$token}/sendMessage", [
+                    'chat_id' => $user_id, // yoki kanal chat_id
+                    'text' => "📢 Iltimos, bizning kanalimizga azo bo‘ling: <a href='{$channel_link}'>Movies</a>",
+                    'parse_mode' => 'HTML'
+                ]);
+                \Log::info($response->body());
+                return;
+            }
 
             // return;
 
