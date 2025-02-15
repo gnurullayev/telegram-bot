@@ -26,7 +26,8 @@ class Handler extends WebhookHandler
             $channel_link = "https://t.me/{$channel_username}";
             $this->reply("📢 Assalomu alaykum! Bizning kanalga azo bo‘lishingizni tavsiya qilamiz.");
             sleep(1);
-            $this->reply("📢 Iltimos, bizning kanalimizga azo bo‘ling: <a href='https://t.me/{$channel_username}'>Kanalga o'tish</a>",);
+            // $this->reply("📢 Iltimos, bizning kanalimizga azo bo‘ling: <a href='https://t.me/{$channel_username}'>Kanalga o'tish</a>",);
+            $this->reply("👉 https://t.me/{$channel_username}");
             // if (!$this->isUserMember($user_id)) {
             //     return;
             // }
