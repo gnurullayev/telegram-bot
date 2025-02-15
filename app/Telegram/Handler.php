@@ -32,9 +32,9 @@ class Handler extends WebhookHandler
         $user = $this->message->from();
         if ($user) {
             $user_id = $user->id();
-            $token = config('services.telegram.bot_token');
-            $channel_username = "romantic_movies1";
-            $channel_link = "https://t.me/{$channel_username}";
+            // $token = config('services.telegram.bot_token');
+            // $channel_username = "romantic_movies1";
+            // $channel_link = "https://t.me/{$channel_username}";
 
             // if (!$this->isUserMember($user_id)) {
             //     Http::post("https://api.telegram.org/bot{$token}/sendMessage", [
