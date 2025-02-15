@@ -27,7 +27,16 @@ class Handler extends WebhookHandler
             $this->reply("📢 Assalomu alaykum! Bizning kanalga azo bo‘lishingizni tavsiya qilamiz.");
             sleep(1);
             // $this->reply("📢 Iltimos, bizning kanalimizga azo bo‘ling: <a href='https://t.me/{$channel_username}'>Kanalga o'tish</a>",);
-            $$this->reply("📢 Iltimos, bizning kanalimizga azo bo‘ling: [romantic_movies1](https://t.me/romantic_movies1)", true);
+            $channel_link = "https://t.me/RomanticMovies777";
+            $token = config('services.telegram.bot_token');
+
+            $response = Http::post("https://api.telegram.org/bot{$token}/sendMessage", [
+                'chat_id' => $user_id, // yoki kanal chat_id
+                'text' => "📢 Iltimos, bizning kanalimizga azo bo‘ling: <a href='{$channel_link}'>Romantic Movies</a>",
+                'parse_mode' => 'HTML'
+            ]);
+
+            \Log::info($response->body());
             // if (!$this->isUserMember($user_id)) {
             //     return;
             // }
