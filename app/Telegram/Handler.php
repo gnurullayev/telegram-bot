@@ -21,6 +21,15 @@ class Handler extends WebhookHandler
         $user = $this->message->from();
         if ($user) {
             $user_id = $user->id();
+            $channel_username = env('CHANNEL_USERNAME', 'romantic_movies1');
+
+            if (!$this->isUserMember($user_id)) {
+                $channel_username = env('CHANNEL_USERNAME', 'romantic_movies1');
+                $channel_link = "https://t.me/{$channel_username}";
+                $this->reply("📢 Iltimos, bizning kanalimizga azo bo‘ling: {$channel_link} \n📢 Please subscribe to our channel:{$channel_link} \n📢 Пожалуйста, подпишитесь на наш канал: {$channel_link}");
+                return;
+            }
+
             $first_name = $user->firstName();
             $last_name = $user->lastName() ?? 'Noma’lum';
             $username = $user->username() ?? 'Noma’lum';
@@ -71,6 +80,23 @@ class Handler extends WebhookHandler
 
     public function handleChatMessage(Stringable $text): void
     {
+        $user = $this->message->from();
+        if (!$user) {
+            \Log::info("❌ Xatolik: foydalanuvchi ma'lumotlari olinmadi.");
+            return;
+        }
+
+        $user_id = $user->id();
+
+        // Kanalga azo ekanligini tekshirish
+        if (!$this->isUserMember($user_id)) {
+            $channel_username = env('CHANNEL_USERNAME', 'romantic_movies1');
+            $channel_link = "https://t.me/{$channel_username}";
+            $this->reply("📢 Iltimos, bizning kanalimizga azo bo‘ling: {$channel_link} \n📢 Please subscribe to our channel:{$channel_link} \n📢 Пожалуйста, подпишитесь на наш канал: {$channel_link}");
+            return;
+        }
+
+
         $movieCode = (string) $text;
 
         if (ctype_digit($movieCode)) {
@@ -105,5 +131,24 @@ class Handler extends WebhookHandler
         } else {
             $this->reply('❌ Xatolik yuz berdi: ' . $response->body());
         }
+    }
+
+    private function isUserMember($user_id): bool
+    {
+        $channel_username = env('CHANNEL_USERNAME', 'romantic_movies1');
+        $channel_id = '@' . $channel_username; // Kanalning username'ini kiriting
+        $bot_token = config('services.telegram.bot_token'); // Bot tokeningiz
+
+        $url = "https://api.telegram.org/bot{$bot_token}/getChatMember?chat_id={$channel_id}&user_id={$user_id}";
+
+        $response = file_get_contents($url);
+        $data = json_decode($response, true);
+
+        if (isset($data['result']['status'])) {
+            $status = $data['result']['status'];
+            return in_array($status, ['member', 'administrator', 'creator']);
+        }
+
+        return false;
     }
 }

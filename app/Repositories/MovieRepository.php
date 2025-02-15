@@ -94,6 +94,7 @@ class MovieRepository extends BaseRepository
         if ($movieDetail->category) {
             $otherCategoryMovies = $movieDetail->category->movies()
                 ->where('id', '!=', $movieDetail->id)
+                ->orderBy('created_at', "desc")
                 ->get()
                 ->map(function ($item) {
                     return [
