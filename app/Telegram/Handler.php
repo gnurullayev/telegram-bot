@@ -33,14 +33,14 @@ class Handler extends WebhookHandler
         if ($user) {
             $user_id = $user->id();
 
-            if (!$this->isUserMember($user_id)) {
-                Http::post("https://api.telegram.org/bot{$this->token}/sendMessage", [
-                    'chat_id' => $user_id, // yoki kanal chat_id
-                    'text' => "📢 Iltimos botimizdan foydalanish uchun, bizning kanalimizga azo bo‘ling \nПожалуйста, подпишитесь на наш канал, чтобы использовать нашего бота\nPlease subscribe to our channel to use our bot.\nBot manzili ➡️ <a href='{$this->channel_link}'>Movies</a>\Адрес бота ➡️ <a href='{$this->channel_link}'>Movies</a>\Bot address ➡️ <a href='{$this->channel_link}'>Movies</a>",
-                    'parse_mode' => 'HTML'
-                ]);
-                return;
-            }
+            // if (!$this->isUserMember($user_id)) {
+            //     Http::post("https://api.telegram.org/bot{$this->token}/sendMessage", [
+            //         'chat_id' => $user_id, // yoki kanal chat_id
+            //         'text' => "📢 Iltimos botimizdan foydalanish uchun, bizning kanalimizga azo bo‘ling \nПожалуйста, подпишитесь на наш канал, чтобы использовать нашего бота\nPlease subscribe to our channel to use our bot.\nBot manzili ➡️ <a href='{$this->channel_link}'>Movies</a>\Адрес бота ➡️ <a href='{$this->channel_link}'>Movies</a>\Bot address ➡️ <a href='{$this->channel_link}'>Movies</a>",
+            //         'parse_mode' => 'HTML'
+            //     ]);
+            //     return;
+            // }
 
 
             $first_name = $user->firstName();
