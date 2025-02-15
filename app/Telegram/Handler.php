@@ -24,10 +24,10 @@ class Handler extends WebhookHandler
             $channel_username = "romantic_movies1";
 
             $channel_link = "https://t.me/{$channel_username}";
-            // $this->reply("📢 Iltimos, bizning kanalimizga azo bo‘ling: {$channel_link}");
-            $this->reply("📢 Iltimos, bizning kanalimizga azo bo‘ling:");
+            $this->reply("📢 Assalomu alaykum! Bizning kanalga azo bo‘lishingizni tavsiya qilamiz.");
             sleep(1);
-            $this->reply("Test xabar: Reply ishlayaptimi?");
+            $this->reply("📢 Iltimos, bizning kanalimizga azo bo‘ling: {$channel_link}");
+
             // if (!$this->isUserMember($user_id)) {
             //     return;
             // }
