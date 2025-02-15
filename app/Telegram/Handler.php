@@ -29,13 +29,13 @@ class Handler extends WebhookHandler
             $this->reply("📢 Bizning kanalga azo bo‘lishingizni tavsiya qilamiz.");
 
 
-            $response = Http::post("https://api.telegram.org/bot{$token}/sendMessage", [
-                'chat_id' => $user_id, // yoki kanal chat_id
-                'text' => "📢 Iltimos, bizning kanalimizga azo bo‘ling: <a href='https://t.me/RomanticMovies777'>Movies</a>",
-                'parse_mode' => 'HTML'
-            ]);
+            // $response = Http::post("https://api.telegram.org/bot{$token}/sendMessage", [
+            //     'chat_id' => $user_id, // yoki kanal chat_id
+            //     'text' => "📢 Iltimos, bizning kanalimizga azo bo‘ling: <a href='https://t.me/RomanticMovies777'>Movies</a>",
+            //     'parse_mode' => 'HTML'
+            // ]);
 
-            \Log::info($response->body());
+            // \Log::info($response->body());
             // if (!$this->isUserMember($user_id)) {
             //     return;
             // }
