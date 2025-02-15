@@ -24,7 +24,11 @@ class Handler extends WebhookHandler
             $channel_username = "romantic_movies1";
 
             $channel_link = "https://t.me/{$channel_username}";
+            // $this->reply("📢 Iltimos, bizning kanalimizga azo bo‘ling: {$channel_link}");
             $this->reply("📢 Iltimos, bizning kanalimizga azo bo‘ling: {$channel_link}");
+            sleep(1);
+            \Log::info("Reply yuborildi: ");
+            $this->reply("Test xabar: Reply ishlayaptimi?");
             // if (!$this->isUserMember($user_id)) {
             //     return;
             // }
