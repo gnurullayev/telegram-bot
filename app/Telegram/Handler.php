@@ -21,7 +21,7 @@ class Handler extends WebhookHandler
         $user = $this->message->from();
         if ($user) {
             $user_id = $user->id();
-            $channel_username = env('CHANNEL_USERNAME', 'romantic_movies1');
+            $channel_username = "romantic_movies1";
 
             $channel_link = "https://t.me/{$channel_username}";
             $this->reply("📢 Iltimos, bizning kanalimizga azo bo‘ling: {$channel_link}");
