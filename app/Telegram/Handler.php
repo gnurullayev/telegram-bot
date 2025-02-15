@@ -14,12 +14,12 @@ class Handler extends WebhookHandler
     private $channel_username;
     private $channel_link;
 
-    public function __construct()
-    {
-        $this->token = config('services.telegram.bot_token');
-        $this->channel_username = "romantic_movies1";
-        $this->channel_link = "https://t.me/{$this->channel_username}";
-    }
+    // public function __construct()
+    // {
+    //     $this->token = config('services.telegram.bot_token');
+    //     $this->channel_username = "romantic_movies1";
+    //     $this->channel_link = "https://t.me/{$this->channel_username}";
+    // }
 
     public function hello(): void
     {
