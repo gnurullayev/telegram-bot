@@ -22,12 +22,12 @@ class Handler extends WebhookHandler
         if ($user) {
             $user_id = $user->id();
             $channel_username = "romantic_movies1";
+            $token = config('services.telegram.bot_token');
+
 
             $channel_link = "https://t.me/{$channel_username}";
-            $this->reply("📢 Assalomu alaykum! Bizning kanalga azo bo‘lishingizni tavsiya qilamiz.");
-            sleep(1);
-            // $this->reply("📢 Iltimos, bizning kanalimizga azo bo‘ling: <a href='https://t.me/{$channel_username}'>Kanalga o'tish</a>",);
-            $token = config('services.telegram.bot_token');
+            $this->reply("📢 Bizning kanalga azo bo‘lishingizni tavsiya qilamiz.");
+
 
             $response = Http::post("https://api.telegram.org/bot{$token}/sendMessage", [
                 'chat_id' => $user_id, // yoki kanal chat_id
