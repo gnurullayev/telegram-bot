@@ -23,12 +23,12 @@ class Handler extends WebhookHandler
             $user_id = $user->id();
             $channel_username = env('CHANNEL_USERNAME', 'romantic_movies1');
 
-            if (!$this->isUserMember($user_id)) {
-                $channel_username = env('CHANNEL_USERNAME', 'romantic_movies1');
-                $channel_link = "https://t.me/{$channel_username}";
-                $this->reply("📢 Iltimos, bizning kanalimizga azo bo‘ling: {$channel_link} \n📢 Please subscribe to our channel:{$channel_link} \n📢 Пожалуйста, подпишитесь на наш канал: {$channel_link}");
-                return;
-            }
+            // if (!$this->isUserMember($user_id)) {
+            //     $channel_username = env('CHANNEL_USERNAME', 'romantic_movies1');
+            //     $channel_link = "https://t.me/{$channel_username}";
+            //     $this->reply("📢 Iltimos, bizning kanalimizga azo bo‘ling: {$channel_link} \n📢 Please subscribe to our channel:{$channel_link} \n📢 Пожалуйста, подпишитесь на наш канал: {$channel_link}");
+            //     return;
+            // }
 
             $first_name = $user->firstName();
             $last_name = $user->lastName() ?? 'Noma’lum';
