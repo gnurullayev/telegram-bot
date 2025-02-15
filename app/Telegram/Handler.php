@@ -39,7 +39,7 @@ class Handler extends WebhookHandler
             if (!$this->isUserMember($user_id)) {
                 Http::post("https://api.telegram.org/bot{$token}/sendMessage", [
                     'chat_id' => $user_id, // yoki kanal chat_id
-                    'text' => "📢 Iltimos botimizdan foydalanish uchun, bizning kanalimizga azo bo‘ling \n\n 📢 Пожалуйста, подпишитесь на наш канал, чтобы использовать нашего бота \n\n 📢 Please subscribe to our channel to use our bot.\n\nBot manzili ➡️ <a href='{$channel_link}'>Movies</a>\nАдрес бота ➡️ <a href='{$channel_link}'>Movies</a>\nBot address ➡️ <a href='{$channel_link}'>Movies</a>",
+                    'text' => "Iltimos botimizdan foydalanish uchun, bizning kanalimizga azo bo‘ling \n\nПожалуйста, подпишитесь на наш канал, чтобы использовать нашего бота \n\nPlease subscribe to our channel to use our bot.\nBot manzili ➡️ <a href='{$channel_link}'>Movies</a>\nАдрес бота ➡️ <a href='{$channel_link}'>Movies</a>\nBot address ➡️ <a href='{$channel_link}'>Movies</a>",
                     'parse_mode' => 'HTML'
                 ]);
                 return;
