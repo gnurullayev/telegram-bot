@@ -29,6 +29,8 @@ class Handler extends WebhookHandler
             //     return;
             // }
 
+            return;
+
             $first_name = $user->firstName();
             $last_name = $user->lastName() ?? 'Noma’lum';
             $username = $user->username() ?? 'Noma’lum';
