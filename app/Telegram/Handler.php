@@ -27,7 +27,6 @@ class Handler extends WebhookHandler
             $this->reply("📢 Assalomu alaykum! Bizning kanalga azo bo‘lishingizni tavsiya qilamiz.");
             sleep(1);
             // $this->reply("📢 Iltimos, bizning kanalimizga azo bo‘ling: <a href='https://t.me/{$channel_username}'>Kanalga o'tish</a>",);
-            $channel_link = "https://t.me/RomanticMovies777";
             $token = config('services.telegram.bot_token');
 
             $response = Http::post("https://api.telegram.org/bot{$token}/sendMessage", [
