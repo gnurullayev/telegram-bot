@@ -10,9 +10,9 @@ use Illuminate\Support\Stringable;
 
 class Handler extends WebhookHandler
 {
-    private $token;
-    private $channel_username;
-    private $channel_link;
+    // private $token;
+    // private $channel_username;
+    // private $channel_link;
 
     // public function __construct()
     // {
@@ -32,15 +32,18 @@ class Handler extends WebhookHandler
         $user = $this->message->from();
         if ($user) {
             $user_id = $user->id();
+            $token = config('services.telegram.bot_token');
+            $channel_username = "romantic_movies1";
+            $channel_link = "https://t.me/{$channel_username}";
 
-            // if (!$this->isUserMember($user_id)) {
-            //     Http::post("https://api.telegram.org/bot{$this->token}/sendMessage", [
-            //         'chat_id' => $user_id, // yoki kanal chat_id
-            //         'text' => "📢 Iltimos botimizdan foydalanish uchun, bizning kanalimizga azo bo‘ling \nПожалуйста, подпишитесь на наш канал, чтобы использовать нашего бота\nPlease subscribe to our channel to use our bot.\nBot manzili ➡️ <a href='{$this->channel_link}'>Movies</a>\Адрес бота ➡️ <a href='{$this->channel_link}'>Movies</a>\Bot address ➡️ <a href='{$this->channel_link}'>Movies</a>",
-            //         'parse_mode' => 'HTML'
-            //     ]);
-            //     return;
-            // }
+            if (!$this->isUserMember($user_id)) {
+                Http::post("https://api.telegram.org/bot{$token}/sendMessage", [
+                    'chat_id' => $user_id, // yoki kanal chat_id
+                    'text' => "📢 Iltimos botimizdan foydalanish uchun, bizning kanalimizga azo bo‘ling \nПожалуйста, подпишитесь на наш канал, чтобы использовать нашего бота\nPlease subscribe to our channel to use our bot.\nBot manzili ➡️ <a href='{$channel_link}'>Movies</a>\Адрес бота ➡️ <a href='{$channel_link}'>Movies</a>\Bot address ➡️ <a href='{$channel_link}'>Movies</a>",
+                    'parse_mode' => 'HTML'
+                ]);
+                return;
+            }
 
 
             $first_name = $user->firstName();
@@ -148,20 +151,22 @@ class Handler extends WebhookHandler
         }
     }
 
-    // private function isUserMember($user_id): bool
-    // {
-    //     $channel_id = '@' . $this->channel_username; // Kanalning username'ini kiriting
+    private function isUserMember($user_id): bool
+    {
+        $token = config('services.telegram.bot_token');
+        $channel_username = "romantic_movies1";
+        $channel_id = '@' . $channel_username; // Kanalning username'ini kiriting
 
-    //     $url = "https://api.telegram.org/bot{$this->token}/getChatMember?chat_id={$channel_id}&user_id={$user_id}";
+        $url = "https://api.telegram.org/bot{$token}/getChatMember?chat_id={$channel_id}&user_id={$user_id}";
 
-    //     $response = file_get_contents($url);
-    //     $data = json_decode($response, true);
+        $response = file_get_contents($url);
+        $data = json_decode($response, true);
 
-    //     if (isset($data['result']['status'])) {
-    //         $status = $data['result']['status'];
-    //         return in_array($status, ['member', 'administrator', 'creator']);
-    //     }
+        if (isset($data['result']['status'])) {
+            $status = $data['result']['status'];
+            return in_array($status, ['member', 'administrator', 'creator']);
+        }
 
-    //     return false;
-    // }
+        return false;
+    }
 }
