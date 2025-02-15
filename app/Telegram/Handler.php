@@ -104,15 +104,18 @@ class Handler extends WebhookHandler
 
         $user_id = $user->id();
 
-        // Kanalga azo ekanligini tekshirish
-        // if (!$this->isUserMember($user_id)) {
-        //     Http::post("https://api.telegram.org/bot{$this->token}/sendMessage", [
-        //         'chat_id' => $user_id, // yoki kanal chat_id
-        //         'text' => "📢 Iltimos botimizdan foydalanish uchun, bizning kanalimizga azo bo‘ling \nПожалуйста, подпишитесь на наш канал, чтобы использовать нашего бота\nPlease subscribe to our channel to use our bot.\nBot manzili ➡️ <a href='{$this->channel_link}'>Movies</a>\Адрес бота ➡️ <a href='{$this->channel_link}'>Movies</a>\Bot address ➡️ <a href='{$this->channel_link}'>Movies</a>",
-        //         'parse_mode' => 'HTML'
-        //     ]);
-        //     return;
-        // }
+        $token = config('services.telegram.bot_token');
+        $channel_username = "romantic_movies1";
+        $channel_link = "https://t.me/{$channel_username}";
+
+        if (!$this->isUserMember($user_id)) {
+            Http::post("https://api.telegram.org/bot{$token}/sendMessage", [
+                'chat_id' => $user_id, // yoki kanal chat_id
+                'text' => "Iltimos botimizdan foydalanish uchun, bizning kanalimizga azo bo‘ling \n\nПожалуйста, подпишитесь на наш канал, чтобы использовать нашего бота \n\nPlease subscribe to our channel to use our bot.\n\nBot manzili ➡️ <a href='{$channel_link}'>Movies</a>\nАдрес бота ➡️ <a href='{$channel_link}'>Movies</a>\nBot address ➡️ <a href='{$channel_link}'>Movies</a>",
+                'parse_mode' => 'HTML'
+            ]);
+            return;
+        }
 
 
         $movieCode = (string) $text;
