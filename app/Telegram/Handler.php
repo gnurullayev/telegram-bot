@@ -22,7 +22,7 @@ class Handler extends WebhookHandler
         if ($user) {
             $user_id = $user->id();
             $channel_username = "romantic_movies1";
-            // $token = config('services.telegram.bot_token');
+            $token = config('services.telegram.bot_token');
 
 
             $channel_link = "https://t.me/{$channel_username}";
