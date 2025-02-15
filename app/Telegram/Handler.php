@@ -148,20 +148,20 @@ class Handler extends WebhookHandler
         }
     }
 
-    private function isUserMember($user_id): bool
-    {
-        $channel_id = '@' . $this->channel_username; // Kanalning username'ini kiriting
+    // private function isUserMember($user_id): bool
+    // {
+    //     $channel_id = '@' . $this->channel_username; // Kanalning username'ini kiriting
 
-        $url = "https://api.telegram.org/bot{$this->token}/getChatMember?chat_id={$channel_id}&user_id={$user_id}";
+    //     $url = "https://api.telegram.org/bot{$this->token}/getChatMember?chat_id={$channel_id}&user_id={$user_id}";
 
-        $response = file_get_contents($url);
-        $data = json_decode($response, true);
+    //     $response = file_get_contents($url);
+    //     $data = json_decode($response, true);
 
-        if (isset($data['result']['status'])) {
-            $status = $data['result']['status'];
-            return in_array($status, ['member', 'administrator', 'creator']);
-        }
+    //     if (isset($data['result']['status'])) {
+    //         $status = $data['result']['status'];
+    //         return in_array($status, ['member', 'administrator', 'creator']);
+    //     }
 
-        return false;
-    }
+    //     return false;
+    // }
 }
