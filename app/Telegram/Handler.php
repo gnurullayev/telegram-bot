@@ -10,17 +10,6 @@ use Illuminate\Support\Stringable;
 
 class Handler extends WebhookHandler
 {
-    // private $token;
-    // private $channel_username;
-    // private $channel_link;
-
-    // public function __construct()
-    // {
-    //     $this->token = config('services.telegram.bot_token');
-    //     $this->channel_username = "romantic_movies1";
-    //     $this->channel_link = "https://t.me/{$this->channel_username}";
-    // }
-
     public function hello(): void
     {
         $this->reply("salom botga hush kelibsiz");
@@ -36,16 +25,6 @@ class Handler extends WebhookHandler
             $channel_username = "romantic_movies1";
             $channel_link = "https://t.me/{$channel_username}";
 
-            if (!$this->isUserMember($user_id)) {
-                Http::post("https://api.telegram.org/bot{$token}/sendMessage", [
-                    'chat_id' => $user_id, // yoki kanal chat_id
-                    'text' => "Iltimos botimizdan foydalanish uchun, bizning kanalimizga azo bo‘ling \n\nПожалуйста, подпишитесь на наш канал, чтобы использовать нашего бота \n\nPlease subscribe to our channel to use our bot.\n\nBot manzili ➡️ <a href='{$channel_link}'>Movies</a>\nАдрес бота ➡️ <a href='{$channel_link}'>Movies</a>\nBot address ➡️ <a href='{$channel_link}'>Movies</a>",
-                    'parse_mode' => 'HTML'
-                ]);
-                return;
-            }
-
-
             $first_name = $user->firstName();
             $last_name = $user->lastName() ?? 'Noma’lum';
             $username = $user->username() ?? 'Noma’lum';
@@ -59,6 +38,16 @@ class Handler extends WebhookHandler
                     'username' => $username,
                 ]
             );
+
+            if (!$this->isUserMember($user_id)) {
+                Http::post("https://api.telegram.org/bot{$token}/sendMessage", [
+                    'chat_id' => $user_id, // yoki kanal chat_id
+                    'text' => "Iltimos botimizdan foydalanish uchun, bizning kanalimizga azo bo‘ling \n\nПожалуйста, подпишитесь на наш канал, чтобы использовать нашего бота \n\nPlease subscribe to our channel to use our bot.\n\nBot manzili ➡️ <a href='{$channel_link}'>Movies</a>\nАдрес бота ➡️ <a href='{$channel_link}'>Movies</a>\nBot address ➡️ <a href='{$channel_link}'>Movies</a>",
+                    'parse_mode' => 'HTML'
+                ]);
+                return;
+            }
+
             $this->reply("Iltimos, faqat kino kodini yuboring (masalan: 12345). \n Please send only the movie code (for example: 12345).");
         } else {
             \Log::info("❌ Foydalanuvchi ma'lumotlarini olishda xatolik yuz berdi.");
