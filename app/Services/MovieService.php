@@ -71,15 +71,16 @@ class MovieService
     public function show($id)
     {
         try {
-            $movie = Movie::query()->where("id", $id)->with(['tags:id', "movieCode"])->get()->first();
+            $movie = Movie::query()->where("id", $id)->with(['tags:id,name', "movieCode"])->get()->first();
             // Custom tags_data uchun
-            $tagsData = [];
-            foreach ($movie->tags as $tag) {
-                $tagsData[] = $tag->id;
-            }
+            $movie->tags->map(function ($tag) {
+                return [
+                    "id" => $tag->id,
+                    "name" => $tag->name, // name ni to'g'ridan-to'g'ri olamiz
+                ];
+            });
 
             // Qo'shimcha ma'lumotni $movie modeliga qo'shish
-            $movie->setAttribute('tags_data', $tagsData);
             $movie->setAttribute('link', $movie->movieCode ? $movie->movieCode->link : null);
             return Response::customJson($movie);
         } catch (\Exception $e) {
