@@ -8,6 +8,7 @@ use App\Http\Requests\MovieUpdateRequest;
 use App\Models\Movie;
 use App\Models\MovieCode;
 use App\Models\Sitemap;
+use App\Models\Tag;
 use App\Repositories\MovieRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
@@ -100,11 +101,7 @@ class MovieService
             }
 
             $movie = Movie::create($validated);
-            if (!empty($validated["tags"])) {
-                foreach ($validated["tags"] as $tag) {
-                    $movie->tags()->attach($tag);
-                }
-            }
+            $this->createAndAttachTag($validated, $movie);
 
             return Response::customJson($movie->load("category"), 201);
         } catch (\Exception $e) {
@@ -133,9 +130,7 @@ class MovieService
                 $validated['poster_url'] = $posterPath;
             }
 
-            if (!empty($validated["tags"])) {
-                $movie->tags()->syncWithoutDetaching($validated["tags"]);
-            }
+            $this->createAndAttachTag($validated, $movie);
 
             $movieCode = MovieCode::where('movie_id', $movie->id)->first();
 
@@ -211,5 +206,30 @@ class MovieService
     {
         $movies = $this->movieRepository->topMovies();
         return $movies;
+    }
+
+    /**
+     * Update the specified movie in storage.
+     * @param mixed $validated
+     * @param Movie $movie
+     */
+
+    public function createAndAttachTag($validated, Movie $movie)
+    {
+
+        if (!empty($validated["tags"])) {
+            $tagIds = [];
+
+            foreach ($validated["tags"] as $tag) {
+                if (is_numeric($tag)) {
+                    $tagIds[] = (int) $tag;
+                } else {
+                    $newTag = Tag::firstOrCreate(["name" => $tag]);
+                    $tagIds[] = $newTag->id;
+                }
+            }
+
+            $movie->tags()->sync($tagIds);
+        }
     }
 }
